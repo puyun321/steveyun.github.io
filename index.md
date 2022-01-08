@@ -6,9 +6,9 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 ### KOW PU YUN 邱普運
 
-[Academic Publications](https://github.com/puyun321/steveyun.github.io/edit/gh-pages/Publication.md)
+[Academic Publications](https://puyun321.github.io/steveyun/Publication.md)
 
-[Personal Work](https://github.com/puyun321/steveyun.github.io/edit/gh-pages/Personal_work.md)
+[Personal Work](https://puyun321.github.io/steveyun/Personal_work.md)
 
 Academic Award
 
