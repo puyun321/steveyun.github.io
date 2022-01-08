@@ -8,7 +8,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 [Academic Publications](https://github.com/puyun321/steveyun.github.io/edit/gh-pages/Publication.md)
 
-[Personal Work](https://github.com/puyun321/steveyun.github.io/edit/gh-pages/Personal work.md)
+[Personal Work](https://github.com/puyun321/steveyun.github.io/edit/gh-pages/Personal_work.md)
 
 Academic Award
 
