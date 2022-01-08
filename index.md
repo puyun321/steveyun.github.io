@@ -1,8 +1,8 @@
 ### KOW PU YUN 邱普運
 
-[Academic Publications](https://puyun321.github.io/steveyun/Publication.md)
+[Academic Publications](Publication.md)
 
-[Personal Work](https://puyun321.github.io/steveyun/Personal_work.md)
+[Personal Work](Personal_work.md)
 
 Academic Award
 
