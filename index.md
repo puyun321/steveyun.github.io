@@ -1,6 +1,7 @@
-### KOW PU YUN 邱普運
+### KOW PU YUN 邱普運 Personal profile
 
-![image](https://user-images.githubusercontent.com/41781189/169663538-3a6f6a54-f2a4-429b-8d1b-843ba68d21ff.png)
+
+![未命名](https://user-images.githubusercontent.com/41781189/169663574-3588b526-c44e-44cd-abc9-e90ca1bd4af7.png)
 
 
 Academic Award
@@ -12,9 +13,9 @@ Academic Award
 ## Header 2
 ### Header 3
 
-[Academic Publications](Publication.md)
+[**Academic Publications**](Publication.md)
 
-[Personal Work](Personal_work.md)
+[**Personal Work**](Personal_work.md)
 
 
 
