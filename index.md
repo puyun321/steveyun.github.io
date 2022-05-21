@@ -17,8 +17,15 @@
 ```markdown
 
 
-### My achievement and works
+### My personal info
 
+**Name:** Pu- Yun Kow
+
+**Education:** 
+
+1. National Taiwan University Department of Bioenvironmental System Engineering Bachelor's Degree
+2. National Taiwan University Department of Bioenvironmental System Engineering Master's Degree
+3. National Taiwan University Department of Bioenvironmental System Engineering (Studying PhD)
 
 
 
