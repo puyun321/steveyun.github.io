@@ -1,8 +1,6 @@
 ### KOW PU YUN 邱普運
 
-[Academic Publications](Publication.md)
 
-[Personal Work](Personal_work.md)
 
 Academic Award
 
@@ -13,15 +11,14 @@ Academic Award
 ## Header 2
 ### Header 3
 
-- Bulleted
-- List
+[Academic Publications](Publication.md)
 
-1. Numbered
-2. List
+[Personal Work](Personal_work.md)
+
+
 
 **Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
 ```
 
 For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
