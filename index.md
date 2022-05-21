@@ -1,6 +1,7 @@
 ### KOW PU YUN 邱普運
 
-![未命名](https://user-images.githubusercontent.com/41781189/169663423-12d5fb81-69b4-4142-a408-eb5d8f52c1fe.png)
+
+![未命名](https://user-images.githubusercontent.com/41781189/169663464-0a098ccd-db69-41a7-82d1-a565609c1511.png)
 
 
 Academic Award
