@@ -38,6 +38,6 @@ Study Interest:
 
 ### Support or Contact
 
-email: d09622001@ntu.edu.tw 
-Department of Bioenvironmental System Engineering 
+email: d09622001@ntu.edu.tw <br>
+Department of Bioenvironmental System Engineering <br>
 [ORCID](https://orcid.org/my-orcid?orcid=0000-0001-5718-9316)
