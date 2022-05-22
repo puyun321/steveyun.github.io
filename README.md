@@ -240,5 +240,5 @@ Use this space to list resources you find helpful and would like to give credit 
 [forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
 [forks-url]: https://github.com/puyun321/puyun321.github.io/network/members
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: [https://linkedin.com/in/othneildrew](https://www.linkedin.com/in/kow-pu-yun-7aaa7b91/)
+[linkedin-url]: https://www.linkedin.com/in/kow-pu-yun-7aaa7b91/
 [product-screenshot]: images/screenshot.png
