@@ -199,6 +199,6 @@ Use this space to list resources you find helpful and would like to give credit 
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://user-images.githubusercontent.com/41781189/169682328-1f0bd04c-4e3f-4a20-8c88-eb109c53eb55.png
 [contributors-url]: https://github.com/puyun321/puyun321.github.io/graphs/contributors
-[linkedin-shield]: https://user-images.githubusercontent.com/41781189/169682331-38c976a3-95da-46b6-84f8-4a723401e2cd.png
+[linkedin-shield]: https://user-images.githubusercontent.com/41781189/169682370-8c2cb4ad-146f-4cfc-a9d6-cf2f60e3f91a.png
 [linkedin-url]: https://www.linkedin.com/in/kow-pu-yun-7aaa7b91/
 [product-screenshot]: images/screenshot.png
