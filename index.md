@@ -42,4 +42,6 @@ Study Interest:
 
 email: d09622001@ntu.edu.tw <br>
 Department of Bioenvironmental System Engineering <br> <br>
-[<img width="40" alt="未命名" src="https://user-images.githubusercontent.com/41781189/169704142-2cde875d-c8f8-4045-97ed-9b8f63528862.png">](https://orcid.org/0000-0001-5718-9316)
+[<img width="40" alt="未命名" src="https://user-images.githubusercontent.com/41781189/169704142-2cde875d-c8f8-4045-97ed-9b8f63528862.png">](https://orcid.org/0000-0001-5718-9316)<br>
+[<img width="83" alt="linkedin" src="https://user-images.githubusercontent.com/41781189/169704289-190fd250-088c-4a66-bdbe-e02e2b9ee96d.png">]
+(https://www.linkedin.com/in/kow-pu-yun-7aaa7b91/)
