@@ -30,17 +30,14 @@ Education:
 Study Interest:
 1. Machine learning
 2. Agriculture
-3. Environment
-
-
-
+3. Environmental Science
 
 
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
 
 ### Support or Contact
 
-email: d09622001@ntu.edu.tw               Department of Bioenvironmental System Engineering                   [ORCID](https://orcid.org/my-orcid?orcid=0000-0001-5718-9316)
+email: d09622001@ntu.edu.tw 
+Department of Bioenvironmental System Engineering 
+[ORCID](https://orcid.org/my-orcid?orcid=0000-0001-5718-9316)
