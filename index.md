@@ -28,7 +28,7 @@ Education:
 1. National Taiwan University Department of Bioenvironmental System Engineering Bachelor's Degree
 2. National Taiwan University Department of Bioenvironmental System Engineering Master's Degree
 3. National Taiwan University Department of Bioenvironmental System Engineering (Studying PhD)
-3.a National Taiwan University Department of Bioenvironmental System Engineering Doctoral Candidate
+a. National Taiwan University Department of Bioenvironmental System Engineering Doctoral Candidate
 
 Study Interest:
 1. Machine learning
