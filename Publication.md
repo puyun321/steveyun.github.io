@@ -4,7 +4,7 @@ My publications
 2.  [Real-time image-based air quality estimation by deep learning neural networks](https://www.sciencedirect.com/science/article/pii/S0301479722001335?via%3Dihub) <br>
 3.  [Deep neural networks for spatiotemporal PM2.5 forecasts based on atmospheric chemical transport model output and monitoring data](https://www.sciencedirect.com/science/article/pii/S0269749122005620?via%3Dihub)
 4. [Integrate deep learning and physically-based models for multi-step-ahead microclimate forecasting](https://www.sciencedirect.com/science/article/abs/pii/S0957417422015688?via%3Dihub)
-
+5. [Develop a hybrid machine learning model for promoting microbe iomass production](https://www.sciencedirect.com/science/article/pii/S096085242201745X?via%3Dihub)
 
 
 
