@@ -118,16 +118,21 @@
                 map.removeLayer(marker);
             });
             markers = [];
-    
+            
             data.forEach(function(row) {
                 var lat = parseFloat(row.lat);
                 var lon = parseFloat(row.lon);
                 var value = parseFloat(row[timeStep]);
-                var site = row['SITE ID'];
-    
+                var siteId = row['SITE ID'];
+                var siteName = row['StationName'];
+                var area = row['Area'];
+                var county = row['County'];
+                var location = row['Location'];
+                var address = row['Address'];
+            
                 // Get color based on value
                 var color = getColor(value);
-    
+            
                 // Create a colored marker
                 var marker = L.circleMarker([lat, lon], {
                     radius: 8, // Size of the marker
@@ -137,11 +142,19 @@
                     opacity: 1, // Border opacity
                     fillOpacity: 0.8 // Fill opacity
                 }).addTo(map);
-    
-                marker.bindPopup('<b>' + site + '</b><br>PM2.5: ' + value);
+            
+                marker.bindPopup(
+                    '<b>' + siteName + '</b><br>' +
+                    'PM2.5: ' + value + '<br>' +
+                    'Area: ' + area + '<br>' +
+                    'County: ' + county + '<br>' +
+                    'Location: ' + location + '<br>' +
+                    'Address: ' + address
+                );
                 markers.push(marker);
             });
-        }
+        }    
+
 
         // Load and merge the CSV files
         function loadAndMergeData(timeStep) {
@@ -150,27 +163,32 @@
                 header: true,
                 complete: function(stationResults) {
                     var stationData = stationResults.data;
-    
+            
                     Papa.parse('data/demo_dataset.csv', {
                         download: true,
                         header: true,
                         complete: function(demoResults) {
                             var demoData = demoResults.data;
-    
+            
                             // Merge station info with demo data
                             var mergedData = demoData.map(function(demoRow) {
                                 var matchingStation = stationData.find(function(stationRow) {
                                     return stationRow['SITE ID'] === demoRow['SITE ID'];
                                 });
-    
+            
                                 return {
                                     'SITE ID': demoRow['SITE ID'],
+                                    'StationName': matchingStation ? matchingStation['StationName'] : 'Unknown Station',
+                                    'Area': matchingStation ? matchingStation['Area'] : 'Unknown Area',
+                                    'County': matchingStation ? matchingStation['County'] : 'Unknown County',
+                                    'Location': matchingStation ? matchingStation['Location'] : 'Unknown Location',
+                                    'Address': matchingStation ? matchingStation['Address'] : 'Unknown Address',
                                     'lat': matchingStation ? matchingStation['lat'] : null,
                                     'lon': matchingStation ? matchingStation['lon'] : null,
                                     [timeStep]: demoRow[timeStep]
                                 };
                             });
-    
+            
                             // Add markers to the map
                             addMarkersFromCSV(mergedData, timeStep);
                         }
@@ -178,6 +196,7 @@
                 }
             });
         }
+
 
         // Initial load for default time step
         var timeStepSelector = document.getElementById('timeStep');
