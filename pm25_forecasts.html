@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM2.5 Forecasts</title>
+    <title>PM2.5 Forecasts Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <style>
         body {
@@ -26,6 +26,7 @@
     <h1>PM2.5 Forecasts Map</h1>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
         // Initialize the map
         var map = L.map('map').setView([23.6978, 120.9605], 7); // Centered on Taiwan
@@ -36,16 +37,51 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Example PM2.5 forecast data
-        var forecasts = [
-            {lat: 25.0330, lng: 121.5654, value: 'Taipei - AQI: 75'},
-            {lat: 24.1477, lng: 120.6736, value: 'Taichung - AQI: 85'},
-            {lat: 22.6273, lng: 120.3014, value: 'Kaohsiung - AQI: 90'}
-        ];
+        // Function to add markers from the merged data
+        function addMarkersFromCSV(data) {
+            data.forEach(function(row) {
+                var lat = parseFloat(row.lat);
+                var lon = parseFloat(row.lon);
+                var value = row['PM2.5'];
+                var site = row['SITE ID'];
 
-        forecasts.forEach(function(forecast) {
-            var marker = L.marker([forecast.lat, forecast.lng]).addTo(map);
-            marker.bindPopup('<p>' + forecast.value + '</p>');
+                var marker = L.marker([lat, lon]).addTo(map);
+                marker.bindPopup('<b>' + site + '</b><br>PM2.5: ' + value);
+            });
+        }
+
+        // Load and merge the CSV files
+        Papa.parse('data/station_info.csv', {
+            download: true,
+            header: true,
+            complete: function(stationResults) {
+                var stationData = stationResults.data;
+
+                Papa.parse('data/demo_dataset.csv', {
+                    download: true,
+                    header: true,
+                    complete: function(demoResults) {
+                        var demoData = demoResults.data;
+
+                        // Merge station info with demo data
+                        var mergedData = demoData.map(function(demoRow) {
+                            var matchingStation = stationData.find(function(stationRow) {
+                                return stationRow['SITE ID'] === demoRow['SITE ID'];
+                            });
+
+                            return {
+                                'SITE ID': demoRow['SITE ID'],
+                                'lat': matchingStation ? matchingStation['lat'] : null,
+                                'lon': matchingStation ? matchingStation['lon'] : null,
+                                'PM2.5': demoRow['t+1'] // Change 't+1' to any other time step if needed
+                            };
+                        });
+
+                        // Add markers to the map
+                        addMarkersFromCSV(mergedData);
+                    }
+                });
+            }
         });
     </script>
 </body>
