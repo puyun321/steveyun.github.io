@@ -27,19 +27,36 @@
 </head>
 <body>
     <h1>PM2.5 Forecasts Map</h1>
-    <div id="controls">
-        <label for="timeStep">Select Time Step: </label>
-        <select id="timeStep">
-            <option value="t">t</option>
-            <option value="t+1">t+1</option>
-            <option value="t+2">t+2</option>
-            <option value="t+72">t+72</option>
-        </select>
     </div>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
+        // Populate the dropdown with time steps
+        function populateTimeSteps() {
+            var timeStepSelector = document.getElementById('timeStep');
+            for (var i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+                var optionValue = i === 0 ? 't' : 't+' + i;
+                var optionText = i === 0 ? 't' : 't+' + i;
+                var option = document.createElement('option');
+                option.value = optionValue;
+                option.text = optionText;
+                timeStepSelector.add(option);
+            }}
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTimeSteps();
+            var timeStepSelector = document.getElementById('timeStep');
+            loadAndMergeData(timeStepSelector.value);
+    
+            // Update the map when the time step is changed
+            timeStepSelector.addEventListener('change', function() {
+                loadAndMergeData(timeStepSelector.value);
+            });
+        });
+
+        
         var map = L.map('map').setView([23.6978, 120.9605], 7); // Centered on Taiwan
         var markers = [];
 
