@@ -117,19 +117,19 @@
                 header: true,
                 complete: function(stationResults) {
                     var stationData = stationResults.data;
-
+    
                     Papa.parse('data/demo_dataset.csv', {
                         download: true,
                         header: true,
                         complete: function(demoResults) {
                             var demoData = demoResults.data;
-
+    
                             // Merge station info with demo data
                             var mergedData = demoData.map(function(demoRow) {
                                 var matchingStation = stationData.find(function(stationRow) {
                                     return stationRow['SITE ID'] === demoRow['SITE ID'];
                                 });
-
+    
                                 return {
                                     'SITE ID': demoRow['SITE ID'],
                                     'lat': matchingStation ? matchingStation['lat'] : null,
@@ -137,7 +137,7 @@
                                     [timeStep]: demoRow[timeStep]
                                 };
                             });
-
+    
                             // Add markers to the map
                             addMarkersFromCSV(mergedData, timeStep);
                         }
