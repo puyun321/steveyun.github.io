@@ -35,6 +35,15 @@
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
+         // Function to determine color based on PM2.5 value
+        function getColor(value) {
+            if (value <= 12) return '#00FF00'; // Green for good
+            if (value <= 35) return '#FFFF00'; // Yellow for moderate
+            if (value <= 55) return '#FFA500'; // Orange for unhealthy for sensitive groups
+            if (value <= 150) return '#FF0000'; // Red for unhealthy
+            return '#800080'; // Purple for very unhealthy
+            }
+        
         // Populate the dropdown with time steps
         function populateTimeSteps() {
             var timeStepSelector = document.getElementById('timeStep');
@@ -76,14 +85,26 @@
                 map.removeLayer(marker);
             });
             markers = [];
-
+    
             data.forEach(function(row) {
                 var lat = parseFloat(row.lat);
                 var lon = parseFloat(row.lon);
-                var value = row[timeStep];
+                var value = parseFloat(row[timeStep]);
                 var site = row['SITE ID'];
-
-                var marker = L.marker([lat, lon]).addTo(map);
+    
+                // Get color based on value
+                var color = getColor(value);
+    
+                // Create a colored marker
+                var marker = L.circleMarker([lat, lon], {
+                    radius: 8, // Size of the marker
+                    fillColor: color, // Fill color based on value
+                    color: color, // Border color
+                    weight: 1, // Border weight
+                    opacity: 1, // Border opacity
+                    fillOpacity: 0.8 // Fill opacity
+                }).addTo(map);
+    
                 marker.bindPopup('<b>' + site + '</b><br>PM2.5: ' + value);
                 markers.push(marker);
             });
