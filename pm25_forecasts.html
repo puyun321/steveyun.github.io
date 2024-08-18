@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM2.5 Forecasts</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #map {
+            height: 80%;
+            width: 100%;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <script>
+        function initMap() {
+            var taiwanCenter = {lat: 23.6978, lng: 120.9605}; // Centered on Taiwan
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 7,
+                center: taiwanCenter
+            });
+
+            // Example PM2.5 forecast data
+            var forecasts = [
+                {lat: 25.0330, lng: 121.5654, value: 'Taipei - AQI: 75'},
+                {lat: 24.1477, lng: 120.6736, value: 'Taichung - AQI: 85'},
+                {lat: 22.6273, lng: 120.3014, value: 'Kaohsiung - AQI: 90'}
+            ];
+
+            forecasts.forEach(function(forecast) {
+                var marker = new google.maps.Marker({
+                    position: {lat: forecast.lat, lng: forecast.lng},
+                    map: map,
+                    title: forecast.value
+                });
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: '<p>' + forecast.value + '</p>'
+                });
+
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
+            });
+        }
+    </script>
+</head>
+<body onload="initMap()">
+    <h1>PM2.5 Forecasts Map</h1>
+    <div id="map"></div>
+</body>
+</html>
