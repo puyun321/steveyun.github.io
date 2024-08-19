@@ -1,14 +1,13 @@
 // Initialize the second map
 console.log("Initializing map2");
 const map2 = L.map('map2').setView([25.038, 121.5645], 13);
-
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map2);
 
-var markers2 = []; // Initialize markers array for map2
+const markersMap2 = []; // Initialize markers array for map2
 
-// Function to determine color based on PM2.5 value
+// Function to determine color based on PM2.5 value (same as map1)
 function getColor(value) {
     if (value <= 12) return '#00FF00'; // Green for good
     if (value <= 35) return '#FFFF00'; // Yellow for moderate
@@ -17,66 +16,10 @@ function getColor(value) {
     return '#800080'; // Purple for very unhealthy
 }
 
-// Populate the file dropdown with CSV files
-async function populateFileDropdown() {
+// Function to load and merge data for map2 (if different from map1, adjust accordingly)
+async function loadAndMergeDataForMap2(fileUrl) {
     try {
-        const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
-        const obsDirectoryResponse = await fetch(obsDirectoryUrl);
-        const obsFiles = await obsDirectoryResponse.json();
-
-        const fileSelect = document.getElementById('fileSelect');
-        fileSelect.innerHTML = ''; // Clear any existing options
-
-        obsFiles.forEach(file => {
-            if (file.name.endsWith('.csv')) {
-                const option = document.createElement('option');
-                option.value = file.download_url;
-                option.text = file.name;
-                fileSelect.add(option);
-            }
-        });
-
-        // Trigger a load on initial selection
-        fileSelect.addEventListener('change', () => {
-            loadAndMergeDataFromCSV(fileSelect.value);
-        });
-    } catch (error) {
-        console.error('Failed to fetch files:', error);
-    }
-}
-
-// Populate the time step dropdown
-function populateTimeSteps() {
-    const timeStepSelector = document.getElementById('timeStep');
-    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        const optionValue = i === 0 ? 't' : 't+' + i;
-        const optionText = i === 0 ? 't' : 't+' + i;
-        const option = document.createElement('option');
-        option.value = optionValue;
-        option.text = optionText;
-        timeStepSelector.add(option);
-    }
-}
-
-// Function to fetch file contents from GitHub
-async function fetchGitHubFileContents(url) {
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'application/vnd.github.v3.raw'
-            }
-        });
-        if (!response.ok) throw new Error('Network response was not ok.');
-        return response.text();
-    } catch (error) {
-        console.error('Failed to fetch file:', error);
-        return '';
-    }
-}
-
-// Function to load and merge data from a selected CSV file
-async function loadAndMergeDataFromCSV(fileUrl) {
-    try {
+        console.log('Loading data from CSV for map2');
         const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
         const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
         const stationData = Papa.parse(stationInfoText, { header: true }).data;
@@ -85,8 +28,8 @@ async function loadAndMergeDataFromCSV(fileUrl) {
         const csvData = Papa.parse(csvText, { header: true }).data;
 
         // Clear existing markers
-        markers2.forEach(marker => map2.removeLayer(marker));
-        markers2 = [];
+        markersMap2.forEach(marker => map2.removeLayer(marker));
+        markersMap2.length = 0;
 
         const timeStep = document.getElementById('timeStep').value;
 
@@ -115,26 +58,27 @@ async function loadAndMergeDataFromCSV(fileUrl) {
                     'Location: ' + (matchingStation ? matchingStation['Location'] : 'Unknown Location') + '<br>' +
                     'Address: ' + (matchingStation ? matchingStation['Address'] : 'Unknown Address')
                 );
-                markers2.push(marker);
+                markersMap2.push(marker);
             }
         });
     } catch (error) {
-        console.error('Failed to load or merge data:', error);
+        console.error('Failed to load or merge data for map2:', error);
     }
 }
 
-// Initial setup
+// Additional functionalities or initial setup for map2 can be added here
+// Example: update map2 when the file or time step is changed
 document.addEventListener('DOMContentLoaded', function() {
-    populateFileDropdown();
-    populateTimeSteps();
+    const fileSelect = document.getElementById('fileSelect');
+    const timeStepSelect = document.getElementById('timeStep');
 
-    // Trigger a load when a CSV file is selected
-    document.getElementById('fileSelect').addEventListener('change', function() {
-        loadAndMergeDataFromCSV(this.value);
+    // Trigger a load for map2 when a CSV file is selected
+    fileSelect.addEventListener('change', function() {
+        loadAndMergeDataForMap2(this.value);
     });
 
-    // Trigger a load when time step is changed
-    document.getElementById('timeStep').addEventListener('change', function() {
-        loadAndMergeDataFromCSV(document.getElementById('fileSelect').value);
+    // Trigger a load for map2 when time step is changed
+    timeStepSelect.addEventListener('change', function() {
+        loadAndMergeDataForMap2(fileSelect.value);
     });
 });
