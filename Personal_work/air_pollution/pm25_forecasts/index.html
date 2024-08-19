@@ -6,16 +6,25 @@
     <title>PM2.5 Forecasts Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
-    
 </head>
 <body>
     <h1>PM2.5 Forecasts Map</h1>
     <div id="controls">
-        <label for="fileSelect">Select CSV File: </label>
-        <select id="fileSelect"></select>
+        <div id="obs-controls">
+            <label for="obs-fileSelect">Select Observation CSV File: </label>
+            <select id="obs-fileSelect"></select>
+            <br>
+            <label for="obs-timeStep">Select Observation Time Step: </label>
+            <select id="obs-timeStep"></select>
+        </div>
         <br>
-        <label for="timeStep">Select Time Step: </label>
-        <select id="timeStep"></select>
+        <div id="pred-controls">
+            <label for="pred-fileSelect">Select Prediction CSV File: </label>
+            <select id="pred-fileSelect"></select>
+            <br>
+            <label for="pred-timeStep">Select Prediction Time Step: </label>
+            <select id="pred-timeStep"></select>
+        </div>
     </div>
     <div style="display: flex; width: 100%; justify-content: space-between;">
         <div style="width: 80%; margin-left: 150px;">
