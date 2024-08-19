@@ -1,4 +1,4 @@
-function plotKrigingResults(observationData) {
+function plotKrigingResults(observationData, predictionData) {
     // Ensure Chart.js is available
     if (typeof Chart === 'undefined') {
         console.error('Chart.js is not available.');
@@ -6,7 +6,7 @@ function plotKrigingResults(observationData) {
     }
 
     // Example: Perform Kriging interpolation (placeholder)
-    const krigingResults = performKriging(observationData);
+    const krigingResults = performKriging(observationData, predictionData);
 
     // Prepare data for plotting
     const labels = krigingResults.map(result => result.label); // Example labels
@@ -63,9 +63,11 @@ function plotKrigingResults(observationData) {
 
 // Placeholder function for Kriging interpolation
 // Replace this with your actual Kriging implementation
-function performKriging(observationData) {
+function performKriging(observationData, predictionData) {
     // Example: Generate synthetic results (replace with actual computation)
-    return observationData.map((data, index) => ({
+    // Combine observation and prediction data for interpolation
+    const combinedData = [...observationData, ...predictionData];
+    return combinedData.map((data, index) => ({
         label: `Point ${index + 1}`,
         value: Math.random() * 100 // Replace with actual Kriging result
     }));
@@ -75,6 +77,6 @@ function performKriging(observationData) {
 document.addEventListener('DOMContentLoaded', function() {
     // If this script is included in the dynamically created window
     if (window.opener && window.opener.plotKrigingResults) {
-        window.opener.plotKrigingResults(window.opener.observationData);
+        window.opener.plotKrigingResults(window.opener.observationData, window.opener.predictionData);
     }
 });
