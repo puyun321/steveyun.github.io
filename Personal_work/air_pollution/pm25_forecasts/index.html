@@ -6,21 +6,47 @@
     <title>PM2.5 Forecasts Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        #color-bar {
+            margin-top: 20px;
+        }
+        .color-scale {
+            display: flex;
+            flex-direction: column;
+        }
+        .color-block {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
     <h1>PM2.5 Forecasts Map</h1>
     <div id="controls">
-        <label for="obs-fileSelect">Select Observation Date: </label>
-        <select id="obs-fileSelect"></select>
-        <br>
-        <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
-        <select id="obs-timeStep"></select>
-        <br>
-        <label for="pred-fileSelect">Select Prediction Date: </label>
-        <select id="pred-fileSelect"></select>
-        <br>
-        <label for="pred-timeStep">Select Prediction Time Step (Hourly): </label>
-        <select id="pred-timeStep"></select>
+        <div class="control-group">
+            <label for="obs-fileSelect">Select Observation Date: </label>
+            <select id="obs-fileSelect"></select>
+            <br>
+            <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
+            <select id="obs-timeStep"></select>
+        </div>
+        <div class="control-group">
+            <label for="pred-fileSelect">Select Prediction Date: </label>
+            <select id="pred-fileSelect"></select>
+            <br>
+            <label for="pred-timeStep">Select Prediction Time Step (Hourly): </label>
+            <select id="pred-timeStep"></select>
+        </div>
     </div>
     <div style="display: flex; width: 100%; justify-content: space-between;">
         <div style="width: 48%; margin-left: 150px;">
