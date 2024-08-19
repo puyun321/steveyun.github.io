@@ -1,4 +1,3 @@
-// Function to perform Kriging interpolation and plot results
 function plotKrigingResults(observationData) {
     // Ensure Chart.js is available
     if (typeof Chart === 'undefined') {
