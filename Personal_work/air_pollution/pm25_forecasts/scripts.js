@@ -84,7 +84,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
         const csvData = Papa.parse(csvText, { header: true }).data;
 
         // Clear existing markers
-        markers.forEach(marker => map.removeLayer(marker));
+        markers.forEach(marker => map1.removeLayer(marker));
         markers = [];
 
         let timeStep = document.getElementById('timeStep').value;
@@ -104,7 +104,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
                     weight: 1,
                     opacity: 1,
                     fillOpacity: 0.8
-                }).addTo(map);
+                }).addTo(map1);
 
                 marker.bindPopup(
                     '<b>' + (matchingStation ? matchingStation['StationName'] : 'Unknown Station') + '</b><br>' +
