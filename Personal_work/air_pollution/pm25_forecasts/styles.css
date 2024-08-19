@@ -12,18 +12,22 @@ body {
     align-items: center;
     position: relative;
 }
+
 #map-container {
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
+
 #map1, #map2 {
     height: 500px; /* Ensure maps have a height */
     width: 48%;
 }
+
 #controls {
     margin: 10px;
 }
+
 #color-bar {
     position: absolute;
     bottom: 10px;
@@ -34,10 +38,12 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     z-index: 1000;
 }
+
 .color-scale {
     display: flex;
     flex-direction: column;
 }
+
 .color-block {
     width: 20px;
     height: 20px;
