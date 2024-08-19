@@ -6,7 +6,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map2);
 
 const markersMap2 = []; // Initialize markers array for map2
-let predictionData = []; // Array to store prediction data
 
 // Function to determine color based on PM2.5 value
 function getColor(value) {
@@ -89,7 +88,7 @@ async function loadAndMergeDataForMap2(fileUrl) {
         const stationData = Papa.parse(stationInfoText, { header: true }).data;
 
         const csvText = await fetchGitHubFileContents(fileUrl);
-        predictionData = Papa.parse(csvText, { header: true }).data; // Store prediction data
+        const csvData = Papa.parse(csvText, { header: true }).data;
 
         // Clear existing markers
         markersMap2.forEach(marker => map2.removeLayer(marker));
@@ -97,7 +96,7 @@ async function loadAndMergeDataForMap2(fileUrl) {
 
         const timeStep = document.getElementById('pred-timeStep').value;
 
-        predictionData.forEach(demoRow => {
+        csvData.forEach(demoRow => {
             const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
             const lat = parseFloat(matchingStation ? matchingStation['lat'] : null);
             const lon = parseFloat(matchingStation ? matchingStation['lon'] : null);
@@ -150,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Plot Kriging results on button click
     document.getElementById('kriging-button').addEventListener('click', function() {
-        if (!predictionData.length) {
+        if (!csvData || !csvData.length) {
             console.error('Prediction data is missing');
             return;
         }
@@ -164,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newWindow.document.write('<h1>Kriging Results</h1>');
         newWindow.document.write('<canvas id="kriging-canvas" width="800" height="600"></canvas>');
         newWindow.document.write('<script>');
-        newWindow.document.write('const predictionData = ' + JSON.stringify(predictionData) + ';');
+        newWindow.document.write('const predictionData = ' + JSON.stringify(csvData) + ';');
         newWindow.document.write('window.onload = function() { plotKrigingResults(predictionData); };');
         newWindow.document.write('</script>');
         newWindow.document.write('</body></html>');
