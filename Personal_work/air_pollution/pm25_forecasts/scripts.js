@@ -6,6 +6,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map1);
 
 const markers = []; // Initialize markers array
+let observationData = []; // Array to store observation data
 
 // Function to determine color based on PM2.5 value
 function getColor(value) {
@@ -89,7 +90,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
         const stationData = Papa.parse(stationInfoText, { header: true }).data;
 
         const csvText = await fetchGitHubFileContents(fileUrl);
-        const csvData = Papa.parse(csvText, { header: true }).data;
+        observationData = Papa.parse(csvText, { header: true }).data; // Store observation data
 
         // Clear existing markers
         markers.forEach(marker => map1.removeLayer(marker));
@@ -97,7 +98,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
 
         const timeStep = document.getElementById('obs-timeStep').value;
 
-        csvData.forEach(demoRow => {
+        observationData.forEach(demoRow => {
             const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
             const lat = parseFloat(matchingStation ? matchingStation['lat'] : null);
             const lon = parseFloat(matchingStation ? matchingStation['lon'] : null);
@@ -146,5 +147,26 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('obs-timeStep').addEventListener('change', function() {
         console.log('Selected observation time step:', this.value);
         loadAndMergeDataFromCSV(document.getElementById('obs-fileSelect').value);
+    });
+
+    // Plot Kriging results on button click
+    document.getElementById('kriging-button').addEventListener('click', function() {
+        if (!observationData.length) {
+            console.error('Observation data is missing');
+            return;
+        }
+
+        // Open a new window and plot Kriging results
+        const newWindow = window.open('', '_blank', 'width=800,height=600');
+        newWindow.document.write('<html><head><title>Kriging Results</title></head><body>');
+        newWindow.document.write('<h1>Kriging Results</h1>');
+        newWindow.document.write('<canvas id="kriging-canvas" width="800" height="600"></canvas>');
+        newWindow.document.write('<script src="path/to/your/plotting-library.js"></script>'); // Adjust the path as needed
+        newWindow.document.write('<script>');
+        newWindow.document.write('const observationData = ' + JSON.stringify(observationData) + ';');
+        newWindow.document.write('plotKrigingResults(observationData);'); // Adjust to your plotting function
+        newWindow.document.write('</script>');
+        newWindow.document.write('</body></html>');
+        newWindow.document.close();
     });
 });
