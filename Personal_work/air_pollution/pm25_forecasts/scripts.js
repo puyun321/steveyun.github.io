@@ -1,13 +1,12 @@
-// Initialize the map for observations
+// Initialize the map
 console.log("Initializing map1");
 const map1 = L.map('map1').setView([23.4787, 120.4506], 7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map1);
 
-const markers = []; // Initialize markers array
+const markersMap1 = []; // Initialize markers array for map1
 let observationData = []; // Array to store observation data
-let predictionData = []; // Array to store prediction data
 
 // Function to determine color based on PM2.5 value
 function getColor(value) {
@@ -19,11 +18,10 @@ function getColor(value) {
 }
 
 // Populate the file dropdown with CSV files from observation data
-async function populateFileDropdown() {
+async function populateFileDropdownForMap1() {
     try {
         const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
         const obsDirectoryResponse = await fetch(obsDirectoryUrl);
-        if (!obsDirectoryResponse.ok) throw new Error('Failed to fetch observation files');
         const obsFiles = await obsDirectoryResponse.json();
 
         console.log('Observation files:', obsFiles); // Debugging line
@@ -42,27 +40,10 @@ async function populateFileDropdown() {
 
         // Trigger a load on initial selection
         fileSelect.addEventListener('change', () => {
-            loadAndMergeDataFromCSV(fileSelect.value, 'observation');
+            loadAndPlotDataForMap1(fileSelect.value);
         });
     } catch (error) {
         console.error('Failed to fetch files:', error);
-    }
-}
-
-// Populate the time step dropdown for observations
-function populateTimeSteps() {
-    const timeStepSelector = document.getElementById('obs-timeStep');
-    if (!timeStepSelector) {
-        console.error('Dropdown with id "obs-timeStep" not found');
-        return;
-    }
-    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        const optionValue = i === 0 ? 't' : 't+' + i;
-        const optionText = i === 0 ? 't' : 't+' + i;
-        const option = document.createElement('option');
-        option.value = optionValue;
-        option.text = optionText;
-        timeStepSelector.add(option);
     }
 }
 
@@ -82,34 +63,26 @@ async function fetchGitHubFileContents(url) {
     }
 }
 
-// Function to load and merge data from a selected CSV file
-async function loadAndMergeDataFromCSV(fileUrl, type) {
+// Function to load and plot data from a selected CSV file for map1
+async function loadAndPlotDataForMap1(fileUrl) {
     try {
-        console.log(`Loading data from CSV for ${type}`);
+        console.log('Loading data from CSV for map1');
         const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
         const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
         const stationData = Papa.parse(stationInfoText, { header: true }).data;
 
         const csvText = await fetchGitHubFileContents(fileUrl);
-        if (type === 'observation') {
-            observationData = Papa.parse(csvText, { header: true }).data;
-        } else if (type === 'prediction') {
-            predictionData = Papa.parse(csvText, { header: true }).data;
-        }
+        observationData = Papa.parse(csvText, { header: true }).data; // Store observation data
 
         // Clear existing markers
-        markers.forEach(marker => map1.removeLayer(marker));
-        markers.length = 0;
+        markersMap1.forEach(marker => map1.removeLayer(marker));
+        markersMap1.length = 0;
 
-        const timeStep = document.getElementById('obs-timeStep').value;
-
-        const dataToUse = type === 'observation' ? observationData : predictionData;
-
-        dataToUse.forEach(demoRow => {
+        observationData.forEach(demoRow => {
             const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
             const lat = parseFloat(matchingStation ? matchingStation['lat'] : null);
             const lon = parseFloat(matchingStation ? matchingStation['lon'] : null);
-            const value = parseFloat(demoRow[timeStep]);
+            const value = parseFloat(demoRow['PM2.5']); // Assuming 'PM2.5' is the correct field
 
             if (!isNaN(lat) && !isNaN(lon)) {
                 const color = getColor(value);
@@ -130,36 +103,29 @@ async function loadAndMergeDataFromCSV(fileUrl, type) {
                     'Location: ' + (matchingStation ? matchingStation['Location'] : 'Unknown Location') + '<br>' +
                     'Address: ' + (matchingStation ? matchingStation['Address'] : 'Unknown Address')
                 );
-                markers.push(marker);
+                markersMap1.push(marker);
             }
         });
     } catch (error) {
-        console.error('Failed to load or merge data:', error);
+        console.error('Failed to load or plot data:', error);
     }
 }
 
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
-    populateFileDropdown();
-    populateTimeSteps(); // Ensure this function is called
+    populateFileDropdownForMap1();
 
     // Trigger a load when a CSV file is selected
     document.getElementById('obs-fileSelect').addEventListener('change', function() {
-        console.log('Selected observation file:', this.value);
-        loadAndMergeDataFromCSV(this.value, 'observation');
-    });
-
-    // Trigger a load when time step is changed
-    document.getElementById('obs-timeStep').addEventListener('change', function() {
-        console.log('Selected observation time step:', this.value);
-        loadAndMergeDataFromCSV(document.getElementById('obs-fileSelect').value, 'observation');
+        console.log('Selected observation file:', this.value); // Debugging line
+        loadAndPlotDataForMap1(this.value);
     });
 
     // Plot Kriging results on button click
     document.getElementById('kriging-button').addEventListener('click', function() {
-        if (!observationData.length || !predictionData.length) {
-            console.error('Observation or prediction data is missing');
+        if (!observationData.length) {
+            console.error('Observation data is missing');
             return;
         }
 
@@ -167,16 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const newWindow = window.open('', '_blank', 'width=800,height=600');
         newWindow.document.write('<html><head><title>Kriging Results</title>');
         newWindow.document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>'); // Include Chart.js
-        newWindow.document.write('<script src="krigingPlot.js"></script>'); // Include Kriging plot script
+        newWindow.document.write('<script src="path/to/krigingPlot.js"></script>'); // Adjust the path to your local script
         newWindow.document.write('</head><body>');
         newWindow.document.write('<h1>Kriging Results</h1>');
         newWindow.document.write('<canvas id="kriging-canvas" width="800" height="600"></canvas>');
         newWindow.document.write('<script>');
-        newWindow.document.write('window.observationData = ' + JSON.stringify(observationData) + ';');
-        newWindow.document.write('window.predictionData = ' + JSON.stringify(predictionData) + ';');
-        newWindow.document.write('document.addEventListener("DOMContentLoaded", function() {');
-        newWindow.document.write('plotKrigingResults(window.observationData, window.predictionData);');
-        newWindow.document.write('});');
+        newWindow.document.write('const observationData = ' + JSON.stringify(observationData) + ';');
+        newWindow.document.write('window.onload = function() { plotKrigingResults(observationData); };');
         newWindow.document.write('</script>');
         newWindow.document.write('</body></html>');
         newWindow.document.close();
