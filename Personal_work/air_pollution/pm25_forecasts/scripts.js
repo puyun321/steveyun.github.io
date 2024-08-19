@@ -158,13 +158,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Open a new window and plot Kriging results
         const newWindow = window.open('', '_blank', 'width=800,height=600');
-        newWindow.document.write('<html><head><title>Kriging Results</title></head><body>');
+        newWindow.document.write('<html><head><title>Kriging Results</title>');
+        newWindow.document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>'); // Include Chart.js
+        newWindow.document.write('</head><body>');
         newWindow.document.write('<h1>Kriging Results</h1>');
         newWindow.document.write('<canvas id="kriging-canvas" width="800" height="600"></canvas>');
-        newWindow.document.write('<script src="path/to/your/plotting-library.js"></script>'); // Adjust the path as needed
         newWindow.document.write('<script>');
+        newWindow.document.write('document.addEventListener("DOMContentLoaded", function() {');
         newWindow.document.write('const observationData = ' + JSON.stringify(observationData) + ';');
-        newWindow.document.write('plotKrigingResults(observationData);'); // Adjust to your plotting function
+        newWindow.document.write('plotKrigingResults(observationData);');
+        newWindow.document.write('});');
         newWindow.document.write('</script>');
         newWindow.document.write('</body></html>');
         newWindow.document.close();
