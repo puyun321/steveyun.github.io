@@ -110,7 +110,7 @@ async function populateFileDropdownForMap2() {
     }
 }
 
-// Populate time steps (same as before)
+// Populate time steps (same as in scripts.js)
 function populateTimeSteps() {
     const timeStepSelector = document.getElementById('timeStep');
     for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
@@ -123,7 +123,7 @@ function populateTimeSteps() {
     }
 }
 
-// Additional functionalities or initial setup for map2
+// Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     populateFileDropdownForMap2();
