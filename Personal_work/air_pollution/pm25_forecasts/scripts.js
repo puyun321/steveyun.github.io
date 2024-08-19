@@ -1,4 +1,4 @@
-// Initialize the first map
+// Initialize the map for observations
 console.log("Initializing map1");
 const map1 = L.map('map1').setView([23.4787, 120.4506], 7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -21,6 +21,7 @@ async function populateFileDropdown() {
     try {
         const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
         const obsDirectoryResponse = await fetch(obsDirectoryUrl);
+        if (!obsDirectoryResponse.ok) throw new Error('Failed to fetch observation files');
         const obsFiles = await obsDirectoryResponse.json();
 
         console.log('Observation files:', obsFiles); // Debugging line
@@ -46,9 +47,13 @@ async function populateFileDropdown() {
     }
 }
 
-// Populate the time step dropdown
+// Populate the time step dropdown for observations
 function populateTimeSteps() {
     const timeStepSelector = document.getElementById('obs-timeStep');
+    if (!timeStepSelector) {
+        console.error('Dropdown with id "obs-timeStep" not found');
+        return;
+    }
     for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
         const optionValue = i === 0 ? 't' : 't+' + i;
         const optionText = i === 0 ? 't' : 't+' + i;
@@ -75,10 +80,10 @@ async function fetchGitHubFileContents(url) {
     }
 }
 
-// Function to load and merge data from a selected CSV file
+// Function to load and merge data from a selected CSV file for map1
 async function loadAndMergeDataFromCSV(fileUrl) {
     try {
-        console.log('Loading data from CSV');
+        console.log('Loading data from CSV for map1');
         const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
         const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
         const stationData = Papa.parse(stationInfoText, { header: true }).data;
@@ -129,17 +134,17 @@ async function loadAndMergeDataFromCSV(fileUrl) {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     populateFileDropdown();
-    populateTimeSteps();
+    populateTimeSteps(); // Ensure this function is called
 
     // Trigger a load when a CSV file is selected
     document.getElementById('obs-fileSelect').addEventListener('change', function() {
-        console.log('Selected observation file:', this.value); // Debugging line
+        console.log('Selected observation file:', this.value);
         loadAndMergeDataFromCSV(this.value);
     });
 
     // Trigger a load when time step is changed
     document.getElementById('obs-timeStep').addEventListener('change', function() {
-        console.log('Selected observation time step:', this.value); // Debugging line
+        console.log('Selected observation time step:', this.value);
         loadAndMergeDataFromCSV(document.getElementById('obs-fileSelect').value);
     });
 });
