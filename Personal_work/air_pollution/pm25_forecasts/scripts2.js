@@ -5,9 +5,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map2);
 
-const markersMap2 = []; // Initialize markers array for map2
+const markersMap2 = []; // Initialize markers array
 
-// Function to determine color based on PM2.5 value (same as map1)
+// Function to determine color based on PM2.5 value
 function getColor(value) {
     if (value <= 12) return '#00FF00'; // Green for good
     if (value <= 35) return '#FFFF00'; // Yellow for moderate
@@ -32,7 +32,7 @@ async function fetchGitHubFileContents(url) {
     }
 }
 
-// Function to load and merge prediction data for map2
+// Function to load and merge data from a selected CSV file for map2
 async function loadAndMergeDataForMap2(fileUrl) {
     try {
         console.log('Loading data from CSV for map2');
@@ -47,7 +47,7 @@ async function loadAndMergeDataForMap2(fileUrl) {
         markersMap2.forEach(marker => map2.removeLayer(marker));
         markersMap2.length = 0;
 
-        const timeStep = document.getElementById('timeStep').value;
+        const timeStep = document.getElementById('pred-timeStep').value;
 
         csvData.forEach(demoRow => {
             const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
@@ -89,7 +89,7 @@ async function populateFileDropdownForMap2() {
         const predDirectoryResponse = await fetch(predDirectoryUrl);
         const predFiles = await predDirectoryResponse.json();
 
-        const fileSelect = document.getElementById('fileSelect');
+        const fileSelect = document.getElementById('pred-fileSelect');
         fileSelect.innerHTML = ''; // Clear any existing options
 
         predFiles.forEach(file => {
@@ -112,14 +112,19 @@ async function populateFileDropdownForMap2() {
 
 // Populate time steps (same as in scripts.js)
 function populateTimeSteps() {
-    const timeStepSelector = document.getElementById('timeStep');
+    const timeStepSelectorObs = document.getElementById('obs-timeStep');
+    const timeStepSelectorPred = document.getElementById('pred-timeStep');
     for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
         const optionValue = i === 0 ? 't' : 't+' + i;
         const optionText = i === 0 ? 't' : 't+' + i;
-        const option = document.createElement('option');
-        option.value = optionValue;
-        option.text = optionText;
-        timeStepSelector.add(option);
+        const optionObs = document.createElement('option');
+        const optionPred = document.createElement('option');
+        optionObs.value = optionValue;
+        optionObs.text = optionText;
+        optionPred.value = optionValue;
+        optionPred.text = optionText;
+        timeStepSelectorObs.add(optionObs);
+        timeStepSelectorPred.add(optionPred);
     }
 }
 
@@ -130,12 +135,12 @@ document.addEventListener('DOMContentLoaded', function() {
     populateTimeSteps();
 
     // Trigger a load when a CSV file is selected
-    document.getElementById('fileSelect').addEventListener('change', function() {
+    document.getElementById('pred-fileSelect').addEventListener('change', function() {
         loadAndMergeDataForMap2(this.value);
     });
 
     // Trigger a load when time step is changed
-    document.getElementById('timeStep').addEventListener('change', function() {
-        loadAndMergeDataForMap2(document.getElementById('fileSelect').value);
+    document.getElementById('pred-timeStep').addEventListener('change', function() {
+        loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
     });
 });
