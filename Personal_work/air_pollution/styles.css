@@ -1,3 +1,6 @@
+/* Leaflet CSS (downloaded and included here) */
+@import url('leaflet.css');
+
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
