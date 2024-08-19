@@ -47,8 +47,12 @@ async function populateFileDropdownForMap2() {
 }
 
 // Populate the time step dropdown
-function populateTimeSteps() {
+function populateTimeSteps2() {
     const timeStepSelector = document.getElementById('pred-timeStep');
+    if (!timeStepSelector) {
+        console.error('Dropdown with id "pred-timeStep" not found');
+        return;
+    }
     for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
         const optionValue = i === 0 ? 't' : 't+' + i;
         const optionText = i === 0 ? 't' : 't+' + i;
@@ -129,7 +133,7 @@ async function loadAndMergeDataForMap2(fileUrl) {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     populateFileDropdownForMap2();
-    populateTimeSteps();
+    populateTimeSteps2();
 
     // Trigger a load when a CSV file is selected
     document.getElementById('pred-fileSelect').addEventListener('change', function() {
