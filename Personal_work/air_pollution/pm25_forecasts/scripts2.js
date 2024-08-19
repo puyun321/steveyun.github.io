@@ -7,7 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const markersMap2 = []; // Initialize markers array for map2
 
-// Function to determine color based on PM2.5 value
+// Function to determine color based on PM2.5 value (same as map1)
 function getColor(value) {
     if (value <= 12) return '#00FF00'; // Green for good
     if (value <= 35) return '#FFFF00'; // Yellow for moderate
@@ -145,28 +145,5 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('pred-timeStep').addEventListener('change', function() {
         console.log('Selected prediction time step:', this.value); // Debugging line
         loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
-    });
-
-    // Plot Kriging results on button click
-    document.getElementById('kriging-button').addEventListener('click', function() {
-        if (!csvData || !csvData.length) {
-            console.error('Prediction data is missing');
-            return;
-        }
-
-        // Open a new window and plot Kriging results
-        const newWindow = window.open('', '_blank', 'width=800,height=600');
-        newWindow.document.write('<html><head><title>Kriging Results</title>');
-        newWindow.document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>'); // Include Chart.js
-        newWindow.document.write('<script src="path/to/krigingPlot.js"></script>'); // Adjust the path to your local script
-        newWindow.document.write('</head><body>');
-        newWindow.document.write('<h1>Kriging Results</h1>');
-        newWindow.document.write('<canvas id="kriging-canvas" width="800" height="600"></canvas>');
-        newWindow.document.write('<script>');
-        newWindow.document.write('const predictionData = ' + JSON.stringify(csvData) + ';');
-        newWindow.document.write('window.onload = function() { plotKrigingResults(predictionData); };');
-        newWindow.document.write('</script>');
-        newWindow.document.write('</body></html>');
-        newWindow.document.close();
     });
 });
