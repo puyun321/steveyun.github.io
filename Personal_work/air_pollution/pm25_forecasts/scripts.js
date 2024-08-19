@@ -1,6 +1,6 @@
 //This file will contain all your JavaScript code.
 
-var map = L.map('map').setView([23.6978, 120.9605], 7); // Centered on Taiwan
+var map = L.map('map1').setView([23.6978, 120.9605], 7); // Centered on Taiwan
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
