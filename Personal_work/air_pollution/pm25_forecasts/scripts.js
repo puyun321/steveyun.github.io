@@ -16,6 +16,49 @@ function getColor(value) {
     return '#800080'; // Purple for very unhealthy
 }
 
+// Populate the file dropdown with CSV files from observation data
+async function populateFileDropdown() {
+    try {
+        const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
+        const obsDirectoryResponse = await fetch(obsDirectoryUrl);
+        const obsFiles = await obsDirectoryResponse.json();
+
+        console.log('Observation files:', obsFiles); // Debugging line
+
+        const fileSelect = document.getElementById('obs-fileSelect');
+        fileSelect.innerHTML = ''; // Clear any existing options
+
+        obsFiles.forEach(file => {
+            if (file.name.endsWith('.csv')) {
+                const option = document.createElement('option');
+                option.value = file.download_url;
+                option.text = file.name;
+                fileSelect.add(option);
+            }
+        });
+
+        // Trigger a load on initial selection
+        fileSelect.addEventListener('change', () => {
+            loadAndMergeDataFromCSV(fileSelect.value);
+        });
+    } catch (error) {
+        console.error('Failed to fetch files:', error);
+    }
+}
+
+// Populate the time step dropdown
+function populateTimeSteps() {
+    const timeStepSelector = document.getElementById('obs-timeStep');
+    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue = i === 0 ? 't' : 't+' + i;
+        const optionText = i === 0 ? 't' : 't+' + i;
+        const option = document.createElement('option');
+        option.value = optionValue;
+        option.text = optionText;
+        timeStepSelector.add(option);
+    }
+}
+
 // Function to fetch file contents from GitHub
 async function fetchGitHubFileContents(url) {
     try {
@@ -82,52 +125,6 @@ async function loadAndMergeDataFromCSV(fileUrl) {
     }
 }
 
-// Populate the file dropdown with CSV files from observation data
-async function populateFileDropdown() {
-    try {
-        const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
-        const obsDirectoryResponse = await fetch(obsDirectoryUrl);
-        const obsFiles = await obsDirectoryResponse.json();
-
-        const fileSelect = document.getElementById('obs-fileSelect');
-        fileSelect.innerHTML = ''; // Clear any existing options
-
-        obsFiles.forEach(file => {
-            if (file.name.endsWith('.csv')) {
-                const option = document.createElement('option');
-                option.value = file.download_url;
-                option.text = file.name;
-                fileSelect.add(option);
-            }
-        });
-
-        // Trigger a load on initial selection
-        fileSelect.addEventListener('change', () => {
-            loadAndMergeDataFromCSV(fileSelect.value);
-        });
-    } catch (error) {
-        console.error('Failed to fetch files:', error);
-    }
-}
-
-// Populate time steps
-function populateTimeSteps() {
-    const timeStepSelectorObs = document.getElementById('obs-timeStep');
-    const timeStepSelectorPred = document.getElementById('pred-timeStep');
-    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        const optionValue = i === 0 ? 't' : 't+' + i;
-        const optionText = i === 0 ? 't' : 't+' + i;
-        const optionObs = document.createElement('option');
-        const optionPred = document.createElement('option');
-        optionObs.value = optionValue;
-        optionObs.text = optionText;
-        optionPred.value = optionValue;
-        optionPred.text = optionText;
-        timeStepSelectorObs.add(optionObs);
-        timeStepSelectorPred.add(optionPred);
-    }
-}
-
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
@@ -136,11 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Trigger a load when a CSV file is selected
     document.getElementById('obs-fileSelect').addEventListener('change', function() {
+        console.log('Selected observation file:', this.value); // Debugging line
         loadAndMergeDataFromCSV(this.value);
     });
 
     // Trigger a load when time step is changed
     document.getElementById('obs-timeStep').addEventListener('change', function() {
+        console.log('Selected observation time step:', this.value); // Debugging line
         loadAndMergeDataFromCSV(document.getElementById('obs-fileSelect').value);
     });
 });
