@@ -12,10 +12,14 @@ body {
     align-items: center;
     position: relative;
 }
-#map {
-    height: 100vh; /* Ensure the map has a height */
-    width: 100%;
-    position: relative;
+#map-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+#map1, #map2 {
+    height: 500px; /* Ensure maps have a height */
+    width: 48%;
 }
 #controls {
     margin: 10px;
