@@ -16,47 +16,6 @@ function getColor(value) {
     return '#800080'; // Purple for very unhealthy
 }
 
-// Populate the file dropdown with CSV files
-async function populateFileDropdown() {
-    try {
-        const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
-        const obsDirectoryResponse = await fetch(obsDirectoryUrl);
-        const obsFiles = await obsDirectoryResponse.json();
-
-        const fileSelect = document.getElementById('fileSelect');
-        fileSelect.innerHTML = ''; // Clear any existing options
-
-        obsFiles.forEach(file => {
-            if (file.name.endsWith('.csv')) {
-                const option = document.createElement('option');
-                option.value = file.download_url;
-                option.text = file.name;
-                fileSelect.add(option);
-            }
-        });
-
-        // Trigger a load on initial selection
-        fileSelect.addEventListener('change', () => {
-            loadAndMergeDataFromCSV(fileSelect.value);
-        });
-    } catch (error) {
-        console.error('Failed to fetch files:', error);
-    }
-}
-
-// Populate the time step dropdown
-function populateTimeSteps() {
-    const timeStepSelector = document.getElementById('timeStep');
-    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        const optionValue = i === 0 ? 't' : 't+' + i;
-        const optionText = i === 0 ? 't' : 't+' + i;
-        const option = document.createElement('option');
-        option.value = optionValue;
-        option.text = optionText;
-        timeStepSelector.add(option);
-    }
-}
-
 // Function to fetch file contents from GitHub
 async function fetchGitHubFileContents(url) {
     try {
@@ -120,6 +79,47 @@ async function loadAndMergeDataFromCSV(fileUrl) {
         });
     } catch (error) {
         console.error('Failed to load or merge data:', error);
+    }
+}
+
+// Populate the file dropdown with CSV files from observation data
+async function populateFileDropdown() {
+    try {
+        const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
+        const obsDirectoryResponse = await fetch(obsDirectoryUrl);
+        const obsFiles = await obsDirectoryResponse.json();
+
+        const fileSelect = document.getElementById('fileSelect');
+        fileSelect.innerHTML = ''; // Clear any existing options
+
+        obsFiles.forEach(file => {
+            if (file.name.endsWith('.csv')) {
+                const option = document.createElement('option');
+                option.value = file.download_url;
+                option.text = file.name;
+                fileSelect.add(option);
+            }
+        });
+
+        // Trigger a load on initial selection
+        fileSelect.addEventListener('change', () => {
+            loadAndMergeDataFromCSV(fileSelect.value);
+        });
+    } catch (error) {
+        console.error('Failed to fetch files:', error);
+    }
+}
+
+// Populate time steps
+function populateTimeSteps() {
+    const timeStepSelector = document.getElementById('timeStep');
+    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue = i === 0 ? 't' : 't+' + i;
+        const optionText = i === 0 ? 't' : 't+' + i;
+        const option = document.createElement('option');
+        option.value = optionValue;
+        option.text = optionText;
+        timeStepSelector.add(option);
     }
 }
 
