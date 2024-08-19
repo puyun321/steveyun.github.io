@@ -1,9 +1,10 @@
 // Initialize the second map
-const map2 = L.map('map2').setView([25.038, 121.5645], 13); // Adjust the coordinates and zoom level as needed
-
+console.log("Initializing map2");
+const map2 = L.map('map2').setView([25.038, 121.5645], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map2);
+
 var markers = []; // Initialize markers array
 
 // Function to determine color based on PM2.5 value
