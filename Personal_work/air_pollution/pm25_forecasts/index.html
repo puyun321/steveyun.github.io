@@ -18,8 +18,14 @@
         <select id="timeStep"></select>
     </div>
     <div style="display: flex; width: 100%; justify-content: space-between;">
-        <div id="map1"></div>
-        <div id="map2"></div>
+        <div id="map1-container" style="position: relative; width: 50%;">
+            <div style="position: absolute; top: 0; left: 0; background-color: white; padding: 5px; font-weight: bold;">Observation</div>
+            <div id="map1" style="height: 400px;"></div>
+        </div>
+        <div id="map2-container" style="position: relative; width: 50%;">
+            <div style="position: absolute; top: 0; left: 0; background-color: white; padding: 5px; font-weight: bold;">Prediction</div>
+            <div id="map2" style="height: 400px;"></div>
+        </div>
     </div>
     <div id="color-bar">
         <h3>PM2.5 Levels</h3>
