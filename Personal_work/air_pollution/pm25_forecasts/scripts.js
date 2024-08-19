@@ -5,7 +5,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map1);
 
-var markers = []; // Initialize markers array
+const markers = []; // Initialize markers array
 
 // Function to determine color based on PM2.5 value
 function getColor(value) {
@@ -46,11 +46,11 @@ async function populateFileDropdown() {
 
 // Populate the time step dropdown
 function populateTimeSteps() {
-    var timeStepSelector = document.getElementById('timeStep');
-    for (var i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        var optionValue = i === 0 ? 't' : 't+' + i;
-        var optionText = i === 0 ? 't' : 't+' + i;
-        var option = document.createElement('option');
+    const timeStepSelector = document.getElementById('timeStep');
+    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue = i === 0 ? 't' : 't+' + i;
+        const optionText = i === 0 ? 't' : 't+' + i;
+        const option = document.createElement('option');
         option.value = optionValue;
         option.text = optionText;
         timeStepSelector.add(option);
@@ -76,6 +76,7 @@ async function fetchGitHubFileContents(url) {
 // Function to load and merge data from a selected CSV file
 async function loadAndMergeDataFromCSV(fileUrl) {
     try {
+        console.log('Loading data from CSV');
         const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
         const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
         const stationData = Papa.parse(stationInfoText, { header: true }).data;
@@ -85,9 +86,9 @@ async function loadAndMergeDataFromCSV(fileUrl) {
 
         // Clear existing markers
         markers.forEach(marker => map1.removeLayer(marker));
-        markers = [];
+        markers.length = 0;
 
-        let timeStep = document.getElementById('timeStep').value;
+        const timeStep = document.getElementById('timeStep').value;
 
         csvData.forEach(demoRow => {
             const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
@@ -124,6 +125,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
 
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
     populateFileDropdown();
     populateTimeSteps();
 
