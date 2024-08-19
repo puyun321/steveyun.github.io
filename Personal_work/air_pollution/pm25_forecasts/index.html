@@ -22,9 +22,15 @@
         <label for="pred-timeStep">Select Prediction Time Step (Hourly): </label>
         <select id="pred-timeStep"></select>
     </div>
-    <div id="maps-container">
-        <div id="map1"></div>
-        <div id="map2"></div>
+    <div style="display: flex; width: 100%; justify-content: space-between;">
+        <div style="width: 48%; margin-left: 150px;">
+            <h2>Observation</h2>
+            <div id="map1" style="height: 700px; width: 500px;"></div>
+        </div>
+        <div style="width: 48%; margin-right: 100px;">
+            <h2>Prediction</h2>
+            <div id="map2" style="height: 700px; width: 500px;"></div>
+        </div>
     </div>
     <div id="color-bar">
         <h3>PM2.5 Levels</h3>
