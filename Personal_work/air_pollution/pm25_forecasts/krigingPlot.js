@@ -37,45 +37,4 @@ function plotKrigingResults(observationData) {
                         display: true,
                         text: 'X Axis Label' // Customize the label as needed
                     }
-                },
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Y Axis Label' // Customize the label as needed
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return 'Value: ' + tooltipItem.raw;
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Placeholder function for Kriging interpolation
-// Replace this with your actual Kriging implementation
-function performKriging(observationData) {
-    // Example: Generate synthetic results (replace with actual computation)
-    return observationData.map((data, index) => ({
-        label: `Point ${index + 1}`,
-        value: Math.random() * 100 // Replace with actual Kriging result
-    }));
-}
-
-// Ensure the script runs after the page content is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // If this script is included in the dynamically created window
-    if (window.opener && window.opener.plotKrigingResults) {
-        window.opener.plotKrigingResults(window.opener.observationData);
-    }
-});
+               
