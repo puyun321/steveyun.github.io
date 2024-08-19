@@ -1,6 +1,6 @@
 // Initialize the first map
 console.log("Initializing map1");
-const map1 = L.map('map1').setView([19.0, 121.0], 7);
+const map1 = L.map('map1').setView([24.1469, 120.6839], 10);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map1);
