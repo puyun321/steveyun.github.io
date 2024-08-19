@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM2.5 Forecasts Map</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>PM2.5 Forecasts Map</h1>
+    <div id="controls">
+        <label for="fileSelect">Select CSV File: </label>
+        <select id="fileSelect"></select>
+        <br>
+        <label for="timeStep">Select Time Step: </label>
+        <select id="timeStep"></select>
+    </div>
+    <div id="map"></div>
+    <div id="color-bar">
+        <h3>PM2.5 Levels</h3>
+        <div class="color-scale">
+            <div class="color-block" style="background-color: #00FF00;"></div><span>&lt; 12</span><br>
+            <div class="color-block" style="background-color: #FFFF00;"></div><span>12 - 35</span><br>
+            <div class="color-block" style="background-color: #FFA500;"></div><span>36 - 55</span><br>
+            <div class="color-block" style="background-color: #FF0000;"></div><span>56 - 150</span><br>
+            <div class="color-block" style="background-color: #800080;"></div><span>&gt; 150</span><br>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
