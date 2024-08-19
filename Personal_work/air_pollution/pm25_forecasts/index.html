@@ -15,6 +15,7 @@
         .control-group {
             display: flex;
             flex-direction: column;
+            margin-right: 20px;
         }
         .map-container {
             display: flex;
@@ -50,7 +51,7 @@
             <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
             <select id="obs-timeStep"></select>
         </div>
-        <div class="control-group" style="margin-left: 300px;">
+        <div class="control-group">
             <label for="pred-fileSelect">Select Prediction Date: </label>
             <select id="pred-fileSelect"></select>
             <br>
@@ -59,11 +60,11 @@
         </div>
     </div>
     <div style="display: flex; width: 100%; justify-content: space-between;">
-        <div class="map-container" style="margin-left: 150px;">
+        <div class="map-container">
             <h2>Observation</h2>
             <div id="map1" style="height: 700px; width: 100%;"></div>
         </div>
-        <div class="map-container" style="margin-right: 100px;">
+        <div class="map-container">
             <h2>Prediction</h2>
             <div id="map2" style="height: 700px; width: 100%;"></div>
         </div>
