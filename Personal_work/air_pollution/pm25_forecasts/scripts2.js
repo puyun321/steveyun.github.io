@@ -1,11 +1,12 @@
 // Initialize the second map
 console.log("Initializing map2");
 const map2 = L.map('map2').setView([25.038, 121.5645], 13);
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map2);
 
-var markers = []; // Initialize markers array
+var markers2 = []; // Initialize markers array for map2
 
 // Function to determine color based on PM2.5 value
 function getColor(value) {
@@ -46,11 +47,11 @@ async function populateFileDropdown() {
 
 // Populate the time step dropdown
 function populateTimeSteps() {
-    var timeStepSelector = document.getElementById('timeStep');
-    for (var i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        var optionValue = i === 0 ? 't' : 't+' + i;
-        var optionText = i === 0 ? 't' : 't+' + i;
-        var option = document.createElement('option');
+    const timeStepSelector = document.getElementById('timeStep');
+    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue = i === 0 ? 't' : 't+' + i;
+        const optionText = i === 0 ? 't' : 't+' + i;
+        const option = document.createElement('option');
         option.value = optionValue;
         option.text = optionText;
         timeStepSelector.add(option);
@@ -84,10 +85,10 @@ async function loadAndMergeDataFromCSV(fileUrl) {
         const csvData = Papa.parse(csvText, { header: true }).data;
 
         // Clear existing markers
-        markers.forEach(marker => map2.removeLayer(marker));
-        markers = [];
+        markers2.forEach(marker => map2.removeLayer(marker));
+        markers2 = [];
 
-        let timeStep = document.getElementById('timeStep').value;
+        const timeStep = document.getElementById('timeStep').value;
 
         csvData.forEach(demoRow => {
             const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
@@ -114,7 +115,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
                     'Location: ' + (matchingStation ? matchingStation['Location'] : 'Unknown Location') + '<br>' +
                     'Address: ' + (matchingStation ? matchingStation['Address'] : 'Unknown Address')
                 );
-                markers.push(marker);
+                markers2.push(marker);
             }
         });
     } catch (error) {
