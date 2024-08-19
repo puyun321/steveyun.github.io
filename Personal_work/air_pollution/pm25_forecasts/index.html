@@ -16,6 +16,16 @@
             display: flex;
             flex-direction: column;
         }
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 48%;
+            margin: 0 1%;
+        }
+        .map-container h2 {
+            margin-bottom: 10px;
+        }
         #color-bar {
             margin-top: 20px;
         }
@@ -49,13 +59,13 @@
         </div>
     </div>
     <div style="display: flex; width: 100%; justify-content: space-between;">
-        <div style="width: 48%; margin-left: 150px;">
+        <div class="map-container" style="margin-left: 150px;">
             <h2>Observation</h2>
-            <div id="map1" style="height: 700px; width: 500px;"></div>
+            <div id="map1" style="height: 700px; width: 100%;"></div>
         </div>
-        <div style="width: 48%; margin-right: 100px;">
+        <div class="map-container" style="margin-right: 100px;">
             <h2>Prediction</h2>
-            <div id="map2" style="height: 700px; width: 500px;"></div>
+            <div id="map2" style="height: 700px; width: 100%;"></div>
         </div>
     </div>
     <div id="color-bar">
