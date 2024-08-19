@@ -90,26 +90,58 @@
             }
         }
 
-        // Initial setup
-        document.addEventListener('DOMContentLoaded', function() {
-            populateTimeSteps();
-            var timeStepSelector = document.getElementById('timeStep');
-            loadAndMergeData(timeStepSelector.value);
-    
-            // Update the map when the time step is changed
-            timeStepSelector.addEventListener('change', function() {
-                loadAndMergeData(timeStepSelector.value);
+        // Function to fetch file contents from GitHub
+        async function fetchGitHubFileContents(url) {
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'application/vnd.github.v3.raw'
+                }
             });
-        });
+            return response.text();
+        }
 
-        var map = L.map('map').setView([23.6978, 120.9605], 7); // Centered on Taiwan
-        var markers = [];
+        // Function to load and merge data from GitHub
+        async function loadAndMergeDataFromGitHub(timeStep) {
+            // Fetch station info CSV from GitHub
+            const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
+            const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
+            const stationData = Papa.parse(stationInfoText, { header: true }).data;
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+            // Fetch the list of files in the "obs" directory
+            const obsDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
+            const obsDirectoryResponse = await fetch(obsDirectoryUrl);
+            const obsFiles = await obsDirectoryResponse.json();
+
+            // Filter out non-CSV files
+            const csvFiles = obsFiles.filter(file => file.name.endsWith('.csv'));
+
+            // Fetch and merge data from each CSV file
+            let mergedData = [];
+            for (const file of csvFiles) {
+                const fileUrl = file.download_url;
+                const fileText = await fetchGitHubFileContents(fileUrl);
+                const demoData = Papa.parse(fileText, { header: true }).data;
+
+                // Merge station info with demo data
+                demoData.forEach(demoRow => {
+                    const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
+                    mergedData.push({
+                        'SITE ID': demoRow['SITE ID'],
+                        'StationName': matchingStation ? matchingStation['StationName'] : 'Unknown Station',
+                        'Area': matchingStation ? matchingStation['Area'] : 'Unknown Area',
+                        'County': matchingStation ? matchingStation['County'] : 'Unknown County',
+                        'Location': matchingStation ? matchingStation['Location'] : 'Unknown Location',
+                        'Address': matchingStation ? matchingStation['Address'] : 'Unknown Address',
+                        'lat': matchingStation ? matchingStation['lat'] : null,
+                        'lon': matchingStation ? matchingStation['lon'] : null,
+                        [timeStep]: demoRow[timeStep]
+                    });
+                });
+            }
+
+            // Add markers to the map
+            addMarkersFromCSV(mergedData, timeStep);
+        }
 
         // Function to add markers from CSV data
         function addMarkersFromCSV(data, timeStep) {
@@ -153,59 +185,19 @@
                 );
                 markers.push(marker);
             });
-        }    
-
-
-        // Load and merge the CSV files
-        function loadAndMergeData(timeStep) {
-            Papa.parse('data/station_info.csv', {
-                download: true,
-                header: true,
-                complete: function(stationResults) {
-                    var stationData = stationResults.data;
-            
-                    Papa.parse('data/obs/demo_dataset.csv', {
-                        download: true,
-                        header: true,
-                        complete: function(demoResults) {
-                            var demoData = demoResults.data;
-            
-                            // Merge station info with demo data
-                            var mergedData = demoData.map(function(demoRow) {
-                                var matchingStation = stationData.find(function(stationRow) {
-                                    return stationRow['SITE ID'] === demoRow['SITE ID'];
-                                });
-            
-                                return {
-                                    'SITE ID': demoRow['SITE ID'],
-                                    'StationName': matchingStation ? matchingStation['StationName'] : 'Unknown Station',
-                                    'Area': matchingStation ? matchingStation['Area'] : 'Unknown Area',
-                                    'County': matchingStation ? matchingStation['County'] : 'Unknown County',
-                                    'Location': matchingStation ? matchingStation['Location'] : 'Unknown Location',
-                                    'Address': matchingStation ? matchingStation['Address'] : 'Unknown Address',
-                                    'lat': matchingStation ? matchingStation['lat'] : null,
-                                    'lon': matchingStation ? matchingStation['lon'] : null,
-                                    [timeStep]: demoRow[timeStep]
-                                };
-                            });
-            
-                            // Add markers to the map
-                            addMarkersFromCSV(mergedData, timeStep);
-                        }
-                    });
-                }
-            });
         }
 
-
-        // Initial load for default time step
-        var timeStepSelector = document.getElementById('timeStep');
-        loadAndMergeData(timeStepSelector.value);
-
-        // Update the map when the time step is changed
-        timeStepSelector.addEventListener('change', function() {
-            loadAndMergeData(timeStepSelector.value);
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTimeSteps();
+            var timeStepSelector = document.getElementById('timeStep');
+            loadAndMergeDataFromGitHub(timeStepSelector.value);
+    
+            // Update the map when the time step is changed
+            timeStepSelector.addEventListener('change', function() {
+                loadAndMergeDataFromGitHub(timeStepSelector.value);
+            });
         });
-    </script>
-</body>
-</html>
+
+        var map = L.map('map').setView([23.6978, 120.9605], 7); // Centered on Taiwan
+        var markers
