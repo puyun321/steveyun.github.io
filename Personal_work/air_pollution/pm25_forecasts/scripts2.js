@@ -16,7 +16,23 @@ function getColor(value) {
     return '#800080'; // Purple for very unhealthy
 }
 
-// Function to load and merge data for map2 (if different from map1, adjust accordingly)
+// Function to fetch file contents from GitHub
+async function fetchGitHubFileContents(url) {
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/vnd.github.v3.raw'
+            }
+        });
+        if (!response.ok) throw new Error('Network response was not ok.');
+        return response.text();
+    } catch (error) {
+        console.error('Failed to fetch file:', error);
+        return '';
+    }
+}
+
+// Function to load and merge prediction data for map2
 async function loadAndMergeDataForMap2(fileUrl) {
     try {
         console.log('Loading data from CSV for map2');
@@ -66,19 +82,60 @@ async function loadAndMergeDataForMap2(fileUrl) {
     }
 }
 
-// Additional functionalities or initial setup for map2 can be added here
-// Example: update map2 when the file or time step is changed
-document.addEventListener('DOMContentLoaded', function() {
-    const fileSelect = document.getElementById('fileSelect');
-    const timeStepSelect = document.getElementById('timeStep');
+// Populate the file dropdown with CSV files from prediction data
+async function populateFileDropdownForMap2() {
+    try {
+        const predDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred?ref=gh-pages';
+        const predDirectoryResponse = await fetch(predDirectoryUrl);
+        const predFiles = await predDirectoryResponse.json();
 
-    // Trigger a load for map2 when a CSV file is selected
-    fileSelect.addEventListener('change', function() {
+        const fileSelect = document.getElementById('fileSelect');
+        fileSelect.innerHTML = ''; // Clear any existing options
+
+        predFiles.forEach(file => {
+            if (file.name.endsWith('.csv')) {
+                const option = document.createElement('option');
+                option.value = file.download_url;
+                option.text = file.name;
+                fileSelect.add(option);
+            }
+        });
+
+        // Trigger a load on initial selection
+        fileSelect.addEventListener('change', () => {
+            loadAndMergeDataForMap2(fileSelect.value);
+        });
+    } catch (error) {
+        console.error('Failed to fetch files:', error);
+    }
+}
+
+// Populate time steps (same as before)
+function populateTimeSteps() {
+    const timeStepSelector = document.getElementById('timeStep');
+    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue = i === 0 ? 't' : 't+' + i;
+        const optionText = i === 0 ? 't' : 't+' + i;
+        const option = document.createElement('option');
+        option.value = optionValue;
+        option.text = optionText;
+        timeStepSelector.add(option);
+    }
+}
+
+// Additional functionalities or initial setup for map2
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
+    populateFileDropdownForMap2();
+    populateTimeSteps();
+
+    // Trigger a load when a CSV file is selected
+    document.getElementById('fileSelect').addEventListener('change', function() {
         loadAndMergeDataForMap2(this.value);
     });
 
-    // Trigger a load for map2 when time step is changed
-    timeStepSelect.addEventListener('change', function() {
-        loadAndMergeDataForMap2(fileSelect.value);
+    // Trigger a load when time step is changed
+    document.getElementById('timeStep').addEventListener('change', function() {
+        loadAndMergeDataForMap2(document.getElementById('fileSelect').value);
     });
 });
