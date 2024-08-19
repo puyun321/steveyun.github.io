@@ -47,7 +47,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
         markers.forEach(marker => map1.removeLayer(marker));
         markers.length = 0;
 
-        const timeStep = document.getElementById('timeStep').value;
+        const timeStep = document.getElementById('obs-timeStep').value;
 
         csvData.forEach(demoRow => {
             const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
@@ -89,7 +89,7 @@ async function populateFileDropdown() {
         const obsDirectoryResponse = await fetch(obsDirectoryUrl);
         const obsFiles = await obsDirectoryResponse.json();
 
-        const fileSelect = document.getElementById('fileSelect');
+        const fileSelect = document.getElementById('obs-fileSelect');
         fileSelect.innerHTML = ''; // Clear any existing options
 
         obsFiles.forEach(file => {
@@ -112,14 +112,19 @@ async function populateFileDropdown() {
 
 // Populate time steps
 function populateTimeSteps() {
-    const timeStepSelector = document.getElementById('timeStep');
+    const timeStepSelectorObs = document.getElementById('obs-timeStep');
+    const timeStepSelectorPred = document.getElementById('pred-timeStep');
     for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
         const optionValue = i === 0 ? 't' : 't+' + i;
         const optionText = i === 0 ? 't' : 't+' + i;
-        const option = document.createElement('option');
-        option.value = optionValue;
-        option.text = optionText;
-        timeStepSelector.add(option);
+        const optionObs = document.createElement('option');
+        const optionPred = document.createElement('option');
+        optionObs.value = optionValue;
+        optionObs.text = optionText;
+        optionPred.value = optionValue;
+        optionPred.text = optionText;
+        timeStepSelectorObs.add(optionObs);
+        timeStepSelectorPred.add(optionPred);
     }
 }
 
@@ -130,12 +135,12 @@ document.addEventListener('DOMContentLoaded', function() {
     populateTimeSteps();
 
     // Trigger a load when a CSV file is selected
-    document.getElementById('fileSelect').addEventListener('change', function() {
+    document.getElementById('obs-fileSelect').addEventListener('change', function() {
         loadAndMergeDataFromCSV(this.value);
     });
 
     // Trigger a load when time step is changed
-    document.getElementById('timeStep').addEventListener('change', function() {
-        loadAndMergeDataFromCSV(document.getElementById('fileSelect').value);
+    document.getElementById('obs-timeStep').addEventListener('change', function() {
+        loadAndMergeDataFromCSV(document.getElementById('obs-fileSelect').value);
     });
 });
