@@ -21,7 +21,7 @@
             flex-direction: column;
             align-items: center;
             width: 48%;
-            margin: 0 2%; /* Increase the margin to create more space between maps */
+            margin: 0 1%;
         }
         .map-container h2 {
             margin-bottom: 10px;
@@ -50,7 +50,7 @@
             <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
             <select id="obs-timeStep"></select>
         </div>
-        <div class="control-group">
+        <div class="control-group" style="margin-left: 150px;">
             <label for="pred-fileSelect">Select Prediction Date: </label>
             <select id="pred-fileSelect"></select>
             <br>
@@ -59,11 +59,11 @@
         </div>
     </div>
     <div style="display: flex; width: 100%; justify-content: space-between;">
-        <div class="map-container">
+        <div class="map-container" style="margin-left: 150px;">
             <h2>Observation</h2>
             <div id="map1" style="height: 700px; width: 100%;"></div>
         </div>
-        <div class="map-container">
+        <div class="map-container" style="margin-right: 100px;">
             <h2>Prediction</h2>
             <div id="map2" style="height: 700px; width: 100%;"></div>
         </div>
