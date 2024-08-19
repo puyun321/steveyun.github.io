@@ -6,6 +6,20 @@
     <title>PM2.5 Forecasts Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
+    <style>
+        #map-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        #map1, #map2 {
+            width: 48%;
+            height: 500px; /* Adjust height as needed */
+        }
+        #controls {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>PM2.5 Forecasts Map</h1>
@@ -16,7 +30,10 @@
         <label for="timeStep">Select Time Step: </label>
         <select id="timeStep"></select>
     </div>
-    <div id="map"></div>
+    <div id="map-container">
+        <div id="map1"></div>
+        <div id="map2"></div>
+    </div>
     <div id="color-bar">
         <h3>PM2.5 Levels</h3>
         <div class="color-scale">
