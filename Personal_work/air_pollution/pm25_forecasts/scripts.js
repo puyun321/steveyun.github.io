@@ -1,9 +1,10 @@
-//This file will contain all your JavaScript code.
+// Initialize the first map
+const map1 = L.map('map1').setView([25.038, 121.5645], 13); // Adjust the coordinates and zoom level as needed
 
-var map = L.map('map1').setView([23.6978, 120.9605], 7); // Centered on Taiwan
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+    maxZoom: 18,
+}).addTo(map1);
+
 var markers = []; // Initialize markers array
 
 // Function to determine color based on PM2.5 value
