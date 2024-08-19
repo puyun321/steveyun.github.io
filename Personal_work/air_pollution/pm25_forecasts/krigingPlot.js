@@ -1,32 +1,73 @@
-function plotKrigingResults(observationData, predictionData) {
-    // Implement Kriging plot logic here
-    // This is a placeholder and should be replaced with your actual Kriging plotting code
+// Function to perform Kriging interpolation and plot results
+function plotKrigingResults(observationData) {
+    // Check if Chart.js is available
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not available.');
+        return;
+    }
 
-    console.log('Plotting Kriging results with:', { observationData, predictionData });
+    // Example: Perform Kriging interpolation (this is a placeholder)
+    // Replace this with your actual Kriging implementation
+    const krigingResults = performKriging(observationData);
 
-    // Example of using a plotting library or custom logic
-    // For demonstration, we’ll use basic HTML Canvas or another library
+    // Prepare data for plotting
+    const labels = krigingResults.map(result => result.label); // Replace with appropriate labels
+    const data = krigingResults.map(result => result.value); // Replace with appropriate data values
+
+    // Create a chart
+    const ctx = document.getElementById('kriging-canvas').getContext('2d');
+    new Chart(ctx, {
+        type: 'line', // Or 'scatter' depending on your data
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Kriging Interpolation Results',
+                data: data,
+                borderColor: '#FF0000',
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return 'Value: ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('kriging-button').addEventListener('click', function() {
-        if (!observationData.length || !predictionData.length) {
-            console.error('Observation or Prediction data is missing');
-            return;
-        }
+// Placeholder function for Kriging interpolation
+// Replace this with your actual Kriging implementation
+function performKriging(observationData) {
+    // Example: Generate synthetic results (replace with actual computation)
+    return observationData.map((data, index) => ({
+        label: `Point ${index + 1}`,
+        value: Math.random() * 100 // Replace with actual Kriging result
+    }));
+}
 
-        // Open a new window and plot Kriging results
-        const newWindow = window.open('', '_blank', 'width=800,height=600');
-        newWindow.document.write('<html><head><title>Kriging Results</title></head><body>');
-        newWindow.document.write('<h1>Kriging Results</h1>');
-        newWindow.document.write('<canvas id="kriging-canvas" width="800" height="600"></canvas>');
-        newWindow.document.write('<script src="path/to/your/plotting-library.js"></script>');
-        newWindow.document.write('<script>');
-        newWindow.document.write('const observationData = ' + JSON.stringify(observationData) + ';');
-        newWindow.document.write('const predictionData = ' + JSON.stringify(predictionData) + ';');
-        newWindow.document.write('plotKrigingResults(observationData, predictionData);');
-        newWindow.document.write('</script>');
-        newWindow.document.write('</body></html>');
-        newWindow.document.close();
-    });
+// Ensure the script runs after the page content is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // If this script is included in the dynamically created window
+    if (window.opener && window.opener.plotKrigingResults) {
+        window.opener.plotKrigingResults(window.opener.observationData);
+    }
 });
