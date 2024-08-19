@@ -5,15 +5,58 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(map2);
 
-const markersMap2 = []; // Initialize markers array
+const markersMap2 = []; // Initialize markers array for map2
 
-// Function to determine color based on PM2.5 value
+// Function to determine color based on PM2.5 value (same as map1)
 function getColor(value) {
     if (value <= 12) return '#00FF00'; // Green for good
     if (value <= 35) return '#FFFF00'; // Yellow for moderate
     if (value <= 55) return '#FFA500'; // Orange for unhealthy for sensitive groups
     if (value <= 150) return '#FF0000'; // Red for unhealthy
     return '#800080'; // Purple for very unhealthy
+}
+
+// Populate the file dropdown with CSV files from prediction data
+async function populateFileDropdownForMap2() {
+    try {
+        const predDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred?ref=gh-pages';
+        const predDirectoryResponse = await fetch(predDirectoryUrl);
+        const predFiles = await predDirectoryResponse.json();
+
+        console.log('Prediction files:', predFiles); // Debugging line
+
+        const fileSelect = document.getElementById('pred-fileSelect');
+        fileSelect.innerHTML = ''; // Clear any existing options
+
+        predFiles.forEach(file => {
+            if (file.name.endsWith('.csv')) {
+                const option = document.createElement('option');
+                option.value = file.download_url;
+                option.text = file.name;
+                fileSelect.add(option);
+            }
+        });
+
+        // Trigger a load on initial selection
+        fileSelect.addEventListener('change', () => {
+            loadAndMergeDataForMap2(fileSelect.value);
+        });
+    } catch (error) {
+        console.error('Failed to fetch files:', error);
+    }
+}
+
+// Populate the time step dropdown
+function populateTimeSteps() {
+    const timeStepSelector = document.getElementById('pred-timeStep');
+    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue = i === 0 ? 't' : 't+' + i;
+        const optionText = i === 0 ? 't' : 't+' + i;
+        const option = document.createElement('option');
+        option.value = optionValue;
+        option.text = optionText;
+        timeStepSelector.add(option);
+    }
 }
 
 // Function to fetch file contents from GitHub
@@ -78,53 +121,7 @@ async function loadAndMergeDataForMap2(fileUrl) {
             }
         });
     } catch (error) {
-        console.error('Failed to load or merge data for map2:', error);
-    }
-}
-
-// Populate the file dropdown with CSV files from prediction data
-async function populateFileDropdownForMap2() {
-    try {
-        const predDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred?ref=gh-pages';
-        const predDirectoryResponse = await fetch(predDirectoryUrl);
-        const predFiles = await predDirectoryResponse.json();
-
-        const fileSelect = document.getElementById('pred-fileSelect');
-        fileSelect.innerHTML = ''; // Clear any existing options
-
-        predFiles.forEach(file => {
-            if (file.name.endsWith('.csv')) {
-                const option = document.createElement('option');
-                option.value = file.download_url;
-                option.text = file.name;
-                fileSelect.add(option);
-            }
-        });
-
-        // Trigger a load on initial selection
-        fileSelect.addEventListener('change', () => {
-            loadAndMergeDataForMap2(fileSelect.value);
-        });
-    } catch (error) {
-        console.error('Failed to fetch files:', error);
-    }
-}
-
-// Populate time steps (same as in scripts.js)
-function populateTimeSteps() {
-    const timeStepSelectorObs = document.getElementById('obs-timeStep');
-    const timeStepSelectorPred = document.getElementById('pred-timeStep');
-    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        const optionValue = i === 0 ? 't' : 't+' + i;
-        const optionText = i === 0 ? 't' : 't+' + i;
-        const optionObs = document.createElement('option');
-        const optionPred = document.createElement('option');
-        optionObs.value = optionValue;
-        optionObs.text = optionText;
-        optionPred.value = optionValue;
-        optionPred.text = optionText;
-        timeStepSelectorObs.add(optionObs);
-        timeStepSelectorPred.add(optionPred);
+        console.error('Failed to load or merge data:', error);
     }
 }
 
@@ -136,11 +133,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Trigger a load when a CSV file is selected
     document.getElementById('pred-fileSelect').addEventListener('change', function() {
+        console.log('Selected prediction file:', this.value); // Debugging line
         loadAndMergeDataForMap2(this.value);
     });
 
     // Trigger a load when time step is changed
     document.getElementById('pred-timeStep').addEventListener('change', function() {
+        console.log('Selected prediction time step:', this.value); // Debugging line
         loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
     });
 });
