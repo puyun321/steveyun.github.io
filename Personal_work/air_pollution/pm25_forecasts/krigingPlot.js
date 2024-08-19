@@ -1,23 +1,22 @@
 // Function to perform Kriging interpolation and plot results
 function plotKrigingResults(observationData) {
-    // Check if Chart.js is available
+    // Ensure Chart.js is available
     if (typeof Chart === 'undefined') {
         console.error('Chart.js is not available.');
         return;
     }
 
-    // Example: Perform Kriging interpolation (this is a placeholder)
-    // Replace this with your actual Kriging implementation
+    // Example: Perform Kriging interpolation (placeholder)
     const krigingResults = performKriging(observationData);
 
     // Prepare data for plotting
-    const labels = krigingResults.map(result => result.label); // Replace with appropriate labels
-    const data = krigingResults.map(result => result.value); // Replace with appropriate data values
+    const labels = krigingResults.map(result => result.label); // Example labels
+    const data = krigingResults.map(result => result.value); // Example data values
 
     // Create a chart
     const ctx = document.getElementById('kriging-canvas').getContext('2d');
     new Chart(ctx, {
-        type: 'line', // Or 'scatter' depending on your data
+        type: 'line', // Change to 'scatter' if your data is best displayed as a scatter plot
         data: {
             labels: labels,
             datasets: [{
@@ -25,17 +24,26 @@ function plotKrigingResults(observationData) {
                 data: data,
                 borderColor: '#FF0000',
                 backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                borderWidth: 1
+                borderWidth: 1,
+                fill: true
             }]
         },
         options: {
             responsive: true,
             scales: {
                 x: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'X Axis Label' // Customize the label as needed
+                    }
                 },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Y Axis Label' // Customize the label as needed
+                    }
                 }
             },
             plugins: {
