@@ -3,43 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM2.5 Observation Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <title>PM2.5 Forecasts Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        #map1 {
-            height: 600px;
-            width: 100%;
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
         }
-        .container {
-            margin: 20px;
+        .control-group {
+            display: flex;
+            flex-direction: column;
         }
-        select {
-            margin: 5px;
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 48%;
+            margin: 0 1%;
+        }
+        .map-container h2 {
+            margin-bottom: 10px;
+        }
+        #color-bar {
+            margin-top: 20px;
+        }
+        .color-scale {
+            display: flex;
+            flex-direction: column;
+        }
+        .color-block {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>PM2.5 Observation Map</h1>
-        <div id="map1"></div>
-
-        <label for="obs-fileSelect">Select Observation File:</label>
-        <select id="obs-fileSelect">
-            <option value="">-- Select a file --</option>
-        </select>
-
-        <label for="obs-timeStep">Select Time Step:</label>
-        <select id="obs-timeStep">
-            <option value="t">t</option>
-        </select>
-
-        <button id="kriging-button">Plot Kriging Results</button>
+    <h1>PM2.5 Forecasts Map</h1>
+    <div id="controls">
+        <div class="control-group">
+            <label for="obs-fileSelect">Select Observation Date: </label>
+            <select id="obs-fileSelect"></select>
+            <br>
+            <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
+            <select id="obs-timeStep"></select>
+        </div>
+        <div class="control-group" style="margin-left: 300px;">
+            <label for="pred-fileSelect">Select Prediction Date: </label>
+            <select id="pred-fileSelect"></select>
+            <br>
+            <label for="pred-timeStep">Select Prediction Time Step (Hourly): </label>
+            <select id="pred-timeStep"></select>
+        </div>
     </div>
-
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
-    <script src="krigingPlot.js"></script>
+    <div style="display: flex; width: 100%; justify-content: space-between;">
+        <div class="map-container" style="margin-left: 150px;">
+            <h2>Observation</h2>
+            <div id="map1" style="height: 700px; width: 100%;"></div>
+        </div>
+        <div class="map-container" style="margin-right: 100px;">
+            <h2>Prediction</h2>
+            <div id="map2" style="height: 700px; width: 100%;"></div>
+        </div>
+    </div>
+    <div id="color-bar">
+        <h3>PM2.5 Levels</h3>
+        <div class="color-scale">
+            <div class="color-block" style="background-color: #00FF00;"></div><span>&lt; 12</span><br>
+            <div class="color-block" style="background-color: #FFFF00;"></div><span>12 - 35</span><br>
+            <div class="color-block" style="background-color: #FFA500;"></div><span>36 - 55</span><br>
+            <div class="color-block" style="background-color: #FF0000;"></div><span>56 - 150</span><br>
+            <div class="color-block" style="background-color: #800080;"></div><span>&gt; 150</span><br>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="scripts.js"></script>
+    <script src="scripts2.js"></script>
 </body>
 </html>
