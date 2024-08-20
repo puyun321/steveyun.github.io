@@ -16,6 +16,17 @@
             display: flex;
             flex-direction: column;
         }
+        .control {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .control label {
+            margin-right: 10px;
+        }
+        .control button {
+            margin-left: 10px;
+        }
         .map-container {
             display: flex;
             flex-direction: column;
@@ -44,27 +55,31 @@
     <h1>PM2.5 Forecasts Map</h1>
     <div id="controls">
         <div class="control-group">
-            <label for="obs-fileSelect">Select Observation Date: </label>
-            <select id="obs-fileSelect"></select>
-            <br>
-            <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
-            <select id="obs-timeStep"></select>
+            <div class="control">
+                <label for="obs-fileSelect">Select Observation Date: </label>
+                <select id="obs-fileSelect"></select>
+                <button id="download-observation">Download Observation Data</button>
+            </div>
+            <div class="control">
+                <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
+                <select id="obs-timeStep"></select>
+            </div>
         </div>
         <div class="control-group" style="margin-left: 300px;">
-            <label for="pred-directorySelect">Select Prediction Directory: </label>
-            <select id="pred-directorySelect"></select>
-            <br>
-            <label for="pred-fileSelect">Select Prediction Date: </label>
-            <select id="pred-fileSelect"></select>
-            <br>
-            <label for="pred-timeStep">Select Prediction Time Step (Hourly): </label>
-            <select id="pred-timeStep"></select>
+            <div class="control">
+                <label for="pred-directorySelect">Select Prediction Directory: </label>
+                <select id="pred-directorySelect"></select>
+            </div>
+            <div class="control">
+                <label for="pred-fileSelect">Select Prediction Date: </label>
+                <select id="pred-fileSelect"></select>
+                <button id="download-forecast">Download Forecast Data</button>
+            </div>
+            <div class="control">
+                <label for="pred-timeStep">Select Prediction Time Step (Hourly): </label>
+                <select id="pred-timeStep"></select>
+            </div>
         </div>
-    </div>
-
-    <div id="download-controls">
-        <button id="download-observation">Download Observation Data</button>
-        <button id="download-forecast">Download Forecast Data</button>
     </div>
 
     <div style="display: flex; width: 100%; justify-content: space-between;">

@@ -57,9 +57,9 @@ function populateTimeSteps() {
         console.error('Dropdown with id "obs-timeStep" not found');
         return;
     }
-    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
-        const optionValue = i === 0 ? 't' : 't+' + i;
-        const optionText = i === 0 ? 't' : 't+' + i;
+    for (let i = 1; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue =  't+' + i;
+        const optionText =  't+' + i;
         const option = document.createElement('option');
         option.value = optionValue;
         option.text = optionText;
@@ -134,7 +134,7 @@ async function loadAndMergeDataFromCSV(fileUrl) {
 }
 
 
-// Function to download observation data for all time steps from t to t+72
+// Function to download observation data for all time steps from t+1 to t+72
 async function downloadObservationData() {
     try {
         const fileUrl = document.getElementById('obs-fileSelect').value;
@@ -147,7 +147,7 @@ async function downloadObservationData() {
         const csvData = Papa.parse(csvText, { header: true }).data;
 
         // Prepare the header (column names)
-        const timeSteps = Array.from({ length: 73 }, (_, i) => i === 0 ? 't' : 't+' + i); // 't' to 't+72'
+        const timeSteps = Array.from({ length: 72 }, (_, i) => 't+' + (i+1)); // 't+1' to 't+72'
         const header = ['SITE ID', ...timeSteps];
 
         // Prepare the data rows
