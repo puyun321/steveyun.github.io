@@ -39,23 +39,21 @@ async function populateDirectoryDropdownForMap2() {
 
         // Trigger a load on initial selection
         directorySelect.addEventListener('change', () => {
-            populateFileDropdownForMap2(directorySelect.value);
+            loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
+            synchronizeFileDropdowns(directorySelect.value);
         });
-
-        // Populate the file dropdown for the first directory by default
-        if (directories.length > 0) {
-            populateFileDropdownForMap2(directories[0].path);
-        }
     } catch (error) {
         console.error('Failed to fetch directories:', error);
     }
 }
 
-// Populate the file dropdown with CSV files from the selected directory
-async function populateFileDropdownForMap2(directoryPath) {
+// Populate the file dropdown with CSV files from the prediction data
+async function populateFileDropdownForMap2() {
     try {
-        const predDirectoryUrl = `https://api.github.com/repos/puyun321/puyun321.github.io/contents/${directoryPath}?ref=gh-pages`;
+        const predDirectoryPath = document.getElementById('pred-directorySelect').value;
+        const predDirectoryUrl = `https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred/${predDirectoryPath}?ref=gh-pages`;
         const predDirectoryResponse = await fetch(predDirectoryUrl);
+        if (!predDirectoryResponse.ok) throw new Error('Failed to fetch prediction files');
         const predFiles = await predDirectoryResponse.json();
 
         console.log('Prediction files:', predFiles); // Debugging line
@@ -73,16 +71,17 @@ async function populateFileDropdownForMap2(directoryPath) {
         });
 
         // Trigger a load on initial selection
-        if (predFiles.length > 0) {
+        fileSelect.addEventListener('change', () => {
             loadAndMergeDataForMap2(fileSelect.value);
-        }
+            synchronizeFileDropdowns(fileSelect.value);
+        });
     } catch (error) {
         console.error('Failed to fetch files:', error);
     }
 }
 
-// Populate the time step dropdown
-function populateTimeSteps2() {
+// Populate the time step dropdown for predictions
+function populateTimeStepsForMap2() {
     const timeStepSelector = document.getElementById('pred-timeStep');
     if (!timeStepSelector) {
         console.error('Dropdown with id "pred-timeStep" not found');
@@ -95,22 +94,6 @@ function populateTimeSteps2() {
         option.value = optionValue;
         option.text = optionText;
         timeStepSelector.add(option);
-    }
-}
-
-// Function to fetch file contents from GitHub
-async function fetchGitHubFileContents(url) {
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'application/vnd.github.v3.raw'
-            }
-        });
-        if (!response.ok) throw new Error('Network response was not ok.');
-        return response.text();
-    } catch (error) {
-        console.error('Failed to fetch file:', error);
-        return '';
     }
 }
 
@@ -164,27 +147,32 @@ async function loadAndMergeDataForMap2(fileUrl) {
     }
 }
 
+// Synchronize file dropdowns
+function synchronizeFileDropdowns(fileUrl) {
+    const obsFileSelect = document.getElementById('obs-fileSelect');
+    if (obsFileSelect) {
+        // Ensure the file dropdown for observations is updated
+        obsFileSelect.value = fileUrl;
+        loadAndMergeDataFromCSV(obsFileSelect.value);
+    }
+}
+
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     populateDirectoryDropdownForMap2();
-    populateTimeSteps2();
-
-    // Trigger a load when a directory is selected
-    document.getElementById('pred-directorySelect').addEventListener('change', function() {
-        console.log('Selected prediction directory:', this.value); // Debugging line
-        populateFileDropdownForMap2(this.value);
-    });
+    populateFileDropdownForMap2();
+    populateTimeStepsForMap2(); // Ensure this function is called
 
     // Trigger a load when a CSV file is selected
     document.getElementById('pred-fileSelect').addEventListener('change', function() {
-        console.log('Selected prediction file:', this.value); // Debugging line
+        console.log('Selected prediction file:', this.value);
         loadAndMergeDataForMap2(this.value);
     });
 
     // Trigger a load when time step is changed
     document.getElementById('pred-timeStep').addEventListener('change', function() {
-        console.log('Selected prediction time step:', this.value); // Debugging line
+        console.log('Selected prediction time step:', this.value);
         loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
     });
 });
