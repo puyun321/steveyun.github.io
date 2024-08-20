@@ -208,3 +208,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listener for the download button
     document.getElementById('download-button').addEventListener('click', generateCSVData);
 });
+
