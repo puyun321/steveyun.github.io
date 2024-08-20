@@ -7,7 +7,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const markersMap2 = []; // Initialize markers array for map2
 
-// Function to determine color based on PM2.5 value (same as map1)
+// Function to determine color based on PM2.5 value
 function getColor(value) {
     if (value <= 12) return '#00FF00'; // Green for good
     if (value <= 35) return '#FFFF00'; // Yellow for moderate
@@ -16,66 +16,36 @@ function getColor(value) {
     return '#800080'; // Purple for very unhealthy
 }
 
-// Populate the directory dropdown with directories from the prediction data
-async function populateDirectoryDropdownForMap2() {
+// Populate the file dropdown with CSV files from prediction data
+async function populateFileDropdownForMap2() {
     try {
-        const baseUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred?ref=gh-pages';
-        const directoryResponse = await fetch(baseUrl);
-        const directories = await directoryResponse.json();
-
-        console.log('Prediction directories:', directories); // Debugging line
-
-        const directorySelect = document.getElementById('pred-directorySelect');
-        directorySelect.innerHTML = ''; // Clear any existing options
-
-        directories.forEach(dir => {
-            if (dir.type === 'dir') { // Only include directories
-                const option = document.createElement('option');
-                option.value = dir.path;
-                option.text = dir.name;
-                directorySelect.add(option);
-            }
-        });
-
-        // Trigger a load on initial selection
-        directorySelect.addEventListener('change', () => {
-            populateFileDropdownForMap2(directorySelect.value);
-        });
-
-        // Populate the file dropdown for the first directory by default
-        if (directories.length > 0) {
-            populateFileDropdownForMap2(directories[0].path);
-        }
-    } catch (error) {
-        console.error('Failed to fetch directories:', error);
-    }
-}
-
-// Populate the file dropdown with CSV files from the selected directory
-async function populateFileDropdownForMap2(directoryPath) {
-    try {
-        const predDirectoryUrl = `https://api.github.com/repos/puyun321/puyun321.github.io/contents/${directoryPath}?ref=gh-pages`;
+        const predDirectoryUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred?ref=gh-pages';
         const predDirectoryResponse = await fetch(predDirectoryUrl);
+        if (!predDirectoryResponse.ok) throw new Error('Failed to fetch prediction directories');
         const predFiles = await predDirectoryResponse.json();
 
         console.log('Prediction files:', predFiles); // Debugging line
 
-        const fileSelect = document.getElementById('pred-fileSelect');
-        fileSelect.innerHTML = ''; // Clear any existing options
+        const predFileSelect = document.getElementById('pred-fileSelect');
+        if (!predFileSelect) {
+            console.error('Dropdown with id "pred-fileSelect" not found');
+            return;
+        }
+        predFileSelect.innerHTML = ''; // Clear any existing options
 
         predFiles.forEach(file => {
             if (file.name.endsWith('.csv')) {
                 const option = document.createElement('option');
                 option.value = file.download_url;
                 option.text = file.name;
-                fileSelect.add(option);
+                predFileSelect.add(option);
             }
         });
 
-        // Trigger a load on initial selection
-        if (predFiles.length > 0) {
-            loadAndMergeDataForMap2(fileSelect.value);
-        }
+        // Trigger data load when a file is selected
+        predFileSelect.addEventListener('change', () => {
+            loadAndMergeDataForMap2(predFileSelect.value);
+        });
     } catch (error) {
         console.error('Failed to fetch files:', error);
     }
@@ -167,14 +137,8 @@ async function loadAndMergeDataForMap2(fileUrl) {
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
-    populateDirectoryDropdownForMap2();
+    populateFileDropdownForMap2();
     populateTimeSteps2();
-
-    // Trigger a load when a directory is selected
-    document.getElementById('pred-directorySelect').addEventListener('change', function() {
-        console.log('Selected prediction directory:', this.value); // Debugging line
-        populateFileDropdownForMap2(this.value);
-    });
 
     // Trigger a load when a CSV file is selected
     document.getElementById('pred-fileSelect').addEventListener('change', function() {
