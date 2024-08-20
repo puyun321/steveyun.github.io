@@ -54,7 +54,7 @@ async function populateDirectoryDropdownForMap2() {
 // Populate the file dropdown with CSV files from the selected directory
 async function populateFileDropdownForMap2(directoryPath) {
     try {
-        const predDirectoryUrl = https://api.github.com/repos/puyun321/puyun321.github.io/contents/${directoryPath}?ref=gh-pages;
+        const predDirectoryUrl = `https://api.github.com/repos/puyun321/puyun321.github.io/contents/${directoryPath}?ref=gh-pages`;
         const predDirectoryResponse = await fetch(predDirectoryUrl);
         const predFiles = await predDirectoryResponse.json();
 
