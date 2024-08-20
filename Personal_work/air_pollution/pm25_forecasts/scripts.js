@@ -130,6 +130,63 @@ async function loadAndMergeDataFromCSV(fileUrl) {
     }
 }
 
+// Function to download data as CSV
+function downloadCSV(data, filename) {
+    const csvContent = "data:text/csv;charset=utf-8," 
+        + data.map(e => e.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Function to generate CSV data from observation data
+async function generateCSVData() {
+    const fileUrl = document.getElementById('obs-fileSelect').value;
+    if (!fileUrl) {
+        alert('Please select an observation file first.');
+        return;
+    }
+
+    try {
+        console.log('Generating CSV data for download');
+        const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
+        const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
+        const stationData = Papa.parse(stationInfoText, { header: true }).data;
+
+        const csvText = await fetchGitHubFileContents(fileUrl);
+        const csvData = Papa.parse(csvText, { header: true }).data;
+
+        const timeStep = document.getElementById('obs-timeStep').value;
+        const csvRows = [];
+        csvRows.push(['Site ID', 'Station Name', 'PM2.5', 'Area', 'County', 'Location', 'Address']); // Header row
+
+        csvData.forEach(demoRow => {
+            const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
+            const value = parseFloat(demoRow[timeStep]);
+
+            if (!isNaN(value)) {
+                csvRows.push([
+                    demoRow['SITE ID'],
+                    matchingStation ? matchingStation['StationName'] : 'Unknown Station',
+                    value,
+                    matchingStation ? matchingStation['Area'] : 'Unknown Area',
+                    matchingStation ? matchingStation['County'] : 'Unknown County',
+                    matchingStation ? matchingStation['Location'] : 'Unknown Location',
+                    matchingStation ? matchingStation['Address'] : 'Unknown Address'
+                ]);
+            }
+        });
+
+        downloadCSV(csvRows, 'observation_data.csv');
+    } catch (error) {
+        console.error('Failed to generate CSV data:', error);
+    }
+}
+
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
@@ -147,4 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Selected observation time step:', this.value);
         loadAndMergeDataFromCSV(document.getElementById('obs-fileSelect').value);
     });
+
+    // Add event listener for the download button
+    document.getElementById('download-button').addEventListener('click', generateCSVData);
 });
