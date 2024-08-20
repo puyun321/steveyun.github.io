@@ -41,6 +41,7 @@ async function populateFileDropdown() {
         // Trigger a load on initial selection
         fileSelect.addEventListener('change', () => {
             loadAndMergeDataFromCSV(fileSelect.value);
+            synchronizeFileDropdowns(fileSelect.value);
         });
     } catch (error) {
         console.error('Failed to fetch files:', error);
@@ -127,6 +128,16 @@ async function loadAndMergeDataFromCSV(fileUrl) {
         });
     } catch (error) {
         console.error('Failed to load or merge data:', error);
+    }
+}
+
+// Synchronize file dropdowns
+function synchronizeFileDropdowns(fileUrl) {
+    const predFileSelect = document.getElementById('pred-fileSelect');
+    if (predFileSelect) {
+        // Ensure the file dropdown for predictions is updated
+        predFileSelect.value = fileUrl;
+        loadAndMergeDataForMap2(predFileSelect.value);
     }
 }
 
