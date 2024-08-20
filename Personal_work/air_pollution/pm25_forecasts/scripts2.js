@@ -26,6 +26,10 @@ async function populateDirectoryDropdownForMap2() {
         console.log('Prediction directories:', directories); // Debugging line
 
         const directorySelect = document.getElementById('pred-directorySelect');
+        if (!directorySelect) {
+            console.error('Dropdown with id "pred-directorySelect" not found');
+            return;
+        }
         directorySelect.innerHTML = ''; // Clear any existing options
 
         directories.forEach(dir => {
@@ -37,7 +41,7 @@ async function populateDirectoryDropdownForMap2() {
             }
         });
 
-        // Trigger a load on initial selection
+        // Trigger file dropdown population when a directory is selected
         directorySelect.addEventListener('change', () => {
             populateFileDropdownForMap2(); // Populate files based on selected directory
         });
@@ -63,6 +67,10 @@ async function populateFileDropdownForMap2() {
         console.log('Prediction files:', predFiles); // Debugging line
 
         const fileSelect = document.getElementById('pred-fileSelect');
+        if (!fileSelect) {
+            console.error('Dropdown with id "pred-fileSelect" not found');
+            return;
+        }
         fileSelect.innerHTML = ''; // Clear any existing options
 
         predFiles.forEach(file => {
@@ -74,7 +82,7 @@ async function populateFileDropdownForMap2() {
             }
         });
 
-        // Trigger a load when a CSV file is selected
+        // Trigger data load when a CSV file is selected
         fileSelect.addEventListener('change', () => {
             loadAndMergeDataForMap2(fileSelect.value);
         });
@@ -150,21 +158,172 @@ async function loadAndMergeDataForMap2(fileUrl) {
     }
 }
 
+// Populate observation dropdowns (assuming similar structure for observation data)
+async function populateObservationDropdowns() {
+    try {
+        const baseUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs?ref=gh-pages';
+        const response = await fetch(baseUrl);
+        if (!response.ok) throw new Error('Failed to fetch observation data directories');
+        const directories = await response.json();
+
+        console.log('Observation directories:', directories); // Debugging line
+
+        const obsDirectorySelect = document.getElementById('obs-fileSelect');
+        const obsDateSelect = document.getElementById('obs-timeStep');
+        if (!obsDirectorySelect || !obsDateSelect) {
+            console.error('Dropdown with id "obs-fileSelect" or "obs-timeStep" not found');
+            return;
+        }
+        obsDirectorySelect.innerHTML = ''; // Clear any existing options
+        obsDateSelect.innerHTML = ''; // Clear any existing options
+
+        directories.forEach(dir => {
+            if (dir.type === 'dir') { // Only include directories
+                const option = document.createElement('option');
+                option.value = dir.path;
+                option.text = dir.name;
+                obsDirectorySelect.add(option);
+            }
+        });
+
+        // Trigger file dropdown population when a directory is selected
+        obsDirectorySelect.addEventListener('change', () => {
+            populateObservationFileDropdowns(); // Populate files based on selected directory
+        });
+
+        // Populate time steps
+        populateObservationTimeSteps();
+    } catch (error) {
+        console.error('Failed to fetch observation data:', error);
+    }
+}
+
+// Populate the file dropdown for observations
+async function populateObservationFileDropdowns() {
+    try {
+        const obsDirectoryPath = document.getElementById('obs-fileSelect').value;
+        if (!obsDirectoryPath) {
+            console.warn('No directory selected');
+            return;
+        }
+
+        const obsDirectoryUrl = `https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/obs/${obsDirectoryPath}?ref=gh-pages`;
+        const obsDirectoryResponse = await fetch(obsDirectoryUrl);
+        if (!obsDirectoryResponse.ok) throw new Error('Failed to fetch observation files');
+        const obsFiles = await obsDirectoryResponse.json();
+
+        console.log('Observation files:', obsFiles); // Debugging line
+
+        const obsFileSelect = document.getElementById('obs-fileSelect');
+        if (!obsFileSelect) {
+            console.error('Dropdown with id "obs-fileSelect" not found');
+            return;
+        }
+        obsFileSelect.innerHTML = ''; // Clear any existing options
+
+        obsFiles.forEach(file => {
+            if (file.name.endsWith('.csv')) {
+                const option = document.createElement('option');
+                option.value = file.download_url;
+                option.text = file.name;
+                obsFileSelect.add(option);
+            }
+        });
+
+        // Trigger data load when a CSV file is selected
+        obsFileSelect.addEventListener('change', () => {
+            loadAndMergeObservationData(obsFileSelect.value);
+        });
+    } catch (error) {
+        console.error('Failed to fetch files:', error);
+    }
+}
+
+// Populate time steps for observation data
+function populateObservationTimeSteps() {
+    const timeStepSelector = document.getElementById('obs-timeStep');
+    if (!timeStepSelector) {
+        console.error('Dropdown with id "obs-timeStep" not found');
+        return;
+    }
+    for (let i = 0; i <= 72; i += 1) { // Adjust the step size as needed
+        const optionValue = i === 0 ? 't' : 't+' + i;
+        const optionText = i === 0 ? 't' : 't+' + i;
+        const option = document.createElement('option');
+        option.value = optionValue;
+        option.text = optionText;
+        timeStepSelector.add(option);
+    }
+}
+
+// Function to load and merge observation data from a selected CSV file
+async function loadAndMergeObservationData(fileUrl) {
+    try {
+        console.log('Loading observation data from CSV');
+        const csvText = await fetch(fileUrl).then(response => response.text());
+        const csvData = Papa.parse(csvText, { header: true }).data;
+
+        // Clear existing markers
+        markersMap2.forEach(marker => map2.removeLayer(marker));
+        markersMap2.length = 0;
+
+        const timeStep = document.getElementById('obs-timeStep').value;
+
+        csvData.forEach(demoRow => {
+            const lat = parseFloat(demoRow['lat']);
+            const lon = parseFloat(demoRow['lon']);
+            const value = parseFloat(demoRow[timeStep]);
+
+            if (!isNaN(lat) && !isNaN(lon)) {
+                const color = getColor(value);
+                const marker = L.circleMarker([lat, lon], {
+                    radius: 8,
+                    fillColor: color,
+                    color: color,
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map2);
+
+                marker.bindPopup(
+                    '<b>Station</b><br>' +
+                    'PM2.5: ' + value + '<br>'
+                );
+                markersMap2.push(marker);
+            }
+        });
+    } catch (error) {
+        console.error('Failed to load or merge observation data:', error);
+    }
+}
+
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     populateDirectoryDropdownForMap2();
-    populateTimeStepsForMap2(); // Ensure this function is called
+    populateObservationDropdowns(); // Populate observation dropdowns
 
-    // Trigger a load when a CSV file is selected
+    // Trigger data load when a CSV file is selected for predictions
     document.getElementById('pred-fileSelect').addEventListener('change', function() {
         console.log('Selected prediction file:', this.value);
         loadAndMergeDataForMap2(this.value);
     });
 
-    // Trigger a load when time step is changed
+    // Trigger data load when time step is changed for predictions
     document.getElementById('pred-timeStep').addEventListener('change', function() {
         console.log('Selected prediction time step:', this.value);
         loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
+    });
+
+    // Trigger data load when a CSV file is selected for observations
+    document.getElementById('obs-fileSelect').addEventListener('change', function() {
+        console.log('Selected observation file:', this.value);
+        loadAndMergeObservationData(this.value);
+    });
+
+    // Trigger data load when time step is changed for observations
+    document.getElementById('obs-timeStep').addEventListener('change', function() {
+        console.log('Selected observation time step:', this.value);
+        loadAndMergeObservationData(document.getElementById('obs-fileSelect').value);
     });
 });
