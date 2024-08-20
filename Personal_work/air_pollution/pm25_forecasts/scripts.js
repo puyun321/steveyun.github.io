@@ -38,10 +38,13 @@ async function populateFileDropdown() {
             }
         });
 
-        // Trigger a load on initial selection
-        fileSelect.addEventListener('change', () => {
+        // Automatically trigger load for the first file in the list
+        if (fileSelect.options.length > 0) {
             loadAndMergeDataFromCSV(fileSelect.value);
-        });
+        } else {
+            console.warn('No CSV files found in the observation directory.');
+            alert('No observation files available.');
+        }
     } catch (error) {
         console.error('Failed to fetch files:', error);
     }
@@ -130,60 +133,50 @@ async function loadAndMergeDataFromCSV(fileUrl) {
     }
 }
 
-// Function to download data as CSV
-function downloadCSV(data, filename) {
-    const csvContent = "data:text/csv;charset=utf-8," 
-        + data.map(e => e.join(",")).join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", filename);
-    document.body.appendChild(link); // Required for Firefox
-    link.click();
-    document.body.removeChild(link);
-}
 
-// Function to generate CSV data from observation data
-async function generateCSVData() {
-    const fileUrl = document.getElementById('obs-fileSelect').value;
-    if (!fileUrl) {
-        alert('Please select an observation file first.');
-        return;
-    }
-
+// Function to download observation data for all time steps from t to t+72
+async function downloadObservationData() {
     try {
-        console.log('Generating CSV data for download');
-        const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
-        const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
-        const stationData = Papa.parse(stationInfoText, { header: true }).data;
+        const fileUrl = document.getElementById('obs-fileSelect').value;
+        if (!fileUrl) {
+            alert('No observation file selected.');
+            return;
+        }
 
         const csvText = await fetchGitHubFileContents(fileUrl);
         const csvData = Papa.parse(csvText, { header: true }).data;
 
-        const timeStep = document.getElementById('obs-timeStep').value;
-        const csvRows = [];
-        csvRows.push(['Site ID', 'Station Name', 'PM2.5', 'Area', 'County', 'Location', 'Address']); // Header row
+        // Prepare the header (column names)
+        const timeSteps = Array.from({ length: 73 }, (_, i) => i === 0 ? 't' : 't+' + i); // 't' to 't+72'
+        const header = ['SITE ID', ...timeSteps];
 
-        csvData.forEach(demoRow => {
-            const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
-            const value = parseFloat(demoRow[timeStep]);
-
-            if (!isNaN(value)) {
-                csvRows.push([
-                    demoRow['SITE ID'],
-                    matchingStation ? matchingStation['StationName'] : 'Unknown Station',
-                    value,
-                    matchingStation ? matchingStation['Area'] : 'Unknown Area',
-                    matchingStation ? matchingStation['County'] : 'Unknown County',
-                    matchingStation ? matchingStation['Location'] : 'Unknown Location',
-                    matchingStation ? matchingStation['Address'] : 'Unknown Address'
-                ]);
-            }
+        // Prepare the data rows
+        const siteIds = Array.from(new Set(csvData.map(row => row['SITE ID']))); // Get unique SITE IDs
+        const allData = siteIds.map(siteId => {
+            const row = { 'SITE ID': siteId };
+            timeSteps.forEach(timeStep => {
+                const siteData = csvData.find(r => r['SITE ID'] === siteId);
+                row[timeStep] = siteData ? siteData[timeStep] : '';
+            });
+            return row;
         });
 
-        downloadCSV(csvRows, 'observation_data.csv');
+        // Convert data to CSV format
+        const csvContent = Papa.unparse({
+            fields: header,
+            data: allData.map(row => header.map(field => row[field]))
+        });
+
+        // Trigger download
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'observation_data_all_timesteps.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     } catch (error) {
-        console.error('Failed to generate CSV data:', error);
+        console.error('Failed to download observation data:', error);
     }
 }
 
@@ -206,6 +199,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add event listener for the download button
-    document.getElementById('download-button').addEventListener('click', generateCSVData);
+    document.getElementById('download-observation').addEventListener('click', downloadObservationData);
 });
-

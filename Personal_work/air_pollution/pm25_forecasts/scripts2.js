@@ -74,7 +74,7 @@ async function populateFileDropdownForMap2(directoryPath) {
 
         // Trigger a load on initial selection
         if (predFiles.length > 0) {
-            loadAndMergeDataForMap2(fileSelect.value);
+            loadAndMergeDataForMap2(predFiles[0].download_url);
         }
     } catch (error) {
         console.error('Failed to fetch files:', error);
@@ -164,7 +164,7 @@ async function loadAndMergeDataForMap2(fileUrl) {
     }
 }
 
-// Function to download forecast data from t to t+72
+// Function to download forecast data for all time steps from t to t+72
 async function downloadForecastData() {
     try {
         const fileUrl = document.getElementById('pred-fileSelect').value;
@@ -172,27 +172,36 @@ async function downloadForecastData() {
             alert('No forecast file selected.');
             return;
         }
+
         const csvText = await fetchGitHubFileContents(fileUrl);
         const csvData = Papa.parse(csvText, { header: true }).data;
-        const timeStep = document.getElementById('pred-timeStep').value;
-        const columnsToKeep = ['SITE ID', timeStep];
 
-        // Filter and keep only the necessary columns
-        const filteredData = csvData.map(row => {
-            let filteredRow = {};
-            columnsToKeep.forEach(column => {
-                filteredRow[column] = row[column];
+        // Prepare the header (column names)
+        const timeSteps = Array.from({ length: 73 }, (_, i) => i === 0 ? 't' : 't+' + i); // 't' to 't+72'
+        const header = ['SITE ID', ...timeSteps];
+
+        // Prepare the data rows
+        const siteIds = Array.from(new Set(csvData.map(row => row['SITE ID']))); // Get unique SITE IDs
+        const allData = siteIds.map(siteId => {
+            const row = { 'SITE ID': siteId };
+            timeSteps.forEach(timeStep => {
+                const siteData = csvData.find(row => row['SITE ID'] === siteId);
+                row[timeStep] = siteData ? siteData[timeStep] : '';
             });
-            return filteredRow;
+            return row;
         });
 
-        // Prepare a CSV blob for download
-        const csvContent = Papa.unparse(filteredData);
+        // Convert data to CSV format
+        const csvContent = Papa.unparse({
+            fields: header,
+            data: allData.map(row => header.map(field => row[field]))
+        });
+
+        // Trigger download
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
-
         link.href = URL.createObjectURL(blob);
-        link.download = `forecast_data_${timeStep}.csv`;
+        link.download = 'forecast_data_all_timesteps.csv';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
