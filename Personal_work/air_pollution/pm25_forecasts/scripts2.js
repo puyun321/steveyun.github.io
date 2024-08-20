@@ -115,4 +115,118 @@ async function fetchGitHubFileContents(url) {
 }
 
 // Function to load and merge data from a selected CSV file for map2
-async function loadAndMergeData
+async function loadAndMergeDataForMap2(fileUrl) {
+    try {
+        console.log('Loading data from CSV for map2');
+        const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
+        const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
+        const stationData = Papa.parse(stationInfoText, { header: true }).data;
+
+        const csvText = await fetchGitHubFileContents(fileUrl);
+        const csvData = Papa.parse(csvText, { header: true }).data;
+
+        // Clear existing markers
+        markersMap2.forEach(marker => map2.removeLayer(marker));
+        markersMap2.length = 0;
+
+        const timeStep = document.getElementById('pred-timeStep').value;
+
+        csvData.forEach(demoRow => {
+            const matchingStation = stationData.find(stationRow => stationRow['SITE ID'] === demoRow['SITE ID']);
+            const lat = parseFloat(matchingStation ? matchingStation['lat'] : null);
+            const lon = parseFloat(matchingStation ? matchingStation['lon'] : null);
+            const value = parseFloat(demoRow[timeStep]);
+
+            if (!isNaN(lat) && !isNaN(lon)) {
+                const color = getColor(value);
+                const marker = L.circleMarker([lat, lon], {
+                    radius: 8,
+                    fillColor: color,
+                    color: color,
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map2);
+
+                marker.bindPopup(
+                    '<b>' + (matchingStation ? matchingStation['StationName'] : 'Unknown Station') + '</b><br>' +
+                    'PM2.5: ' + value + '<br>' +
+                    'Area: ' + (matchingStation ? matchingStation['Area'] : 'Unknown Area') + '<br>' +
+                    'County: ' + (matchingStation ? matchingStation['County'] : 'Unknown County') + '<br>' +
+                    'Location: ' + (matchingStation ? matchingStation['Location'] : 'Unknown Location') + '<br>' +
+                    'Address: ' + (matchingStation ? matchingStation['Address'] : 'Unknown Address')
+                );
+                markersMap2.push(marker);
+            }
+        });
+    } catch (error) {
+        console.error('Failed to load or merge data:', error);
+    }
+}
+
+// Function to download forecast data from t to t+72
+async function downloadForecastData() {
+    try {
+        const fileUrl = document.getElementById('pred-fileSelect').value;
+        if (!fileUrl) {
+            alert('No forecast file selected.');
+            return;
+        }
+        const csvText = await fetchGitHubFileContents(fileUrl);
+        const csvData = Papa.parse(csvText, { header: true }).data;
+        const timeStep = document.getElementById('pred-timeStep').value;
+        const columnsToKeep = ['SITE ID', timeStep];
+
+        // Filter and keep only the necessary columns
+        const filteredData = csvData.map(row => {
+            let filteredRow = {};
+            columnsToKeep.forEach(column => {
+                filteredRow[column] = row[column];
+            });
+            return filteredRow;
+        });
+
+        // Prepare a CSV blob for download
+        const csvContent = Papa.unparse(filteredData);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+
+        link.href = URL.createObjectURL(blob);
+        link.download = `forecast_data_${timeStep}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        console.error('Failed to download forecast data:', error);
+    }
+}
+
+// Initial setup
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
+    populateDirectoryDropdownForMap2();
+    populateTimeSteps2();
+
+    // Trigger a load when a directory is selected
+    document.getElementById('pred-directorySelect').addEventListener('change', function() {
+        console.log('Selected prediction directory:', this.value); // Debugging line
+        populateFileDropdownForMap2(this.value);
+    });
+
+    // Trigger a load when a CSV file is selected
+    document.getElementById('pred-fileSelect').addEventListener('change', function() {
+        console.log('Selected prediction file:', this.value); // Debugging line
+        loadAndMergeDataForMap2(this.value);
+    });
+
+    // Trigger a load when time step is changed
+    document.getElementById('pred-timeStep').addEventListener('change', function() {
+        console.log('Selected prediction time step:', this.value); // Debugging line
+        loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
+    });
+
+    // Add event listener for download button
+    document.getElementById('download-forecast').addEventListener('click', function() {
+        downloadForecastData();
+    });
+});
