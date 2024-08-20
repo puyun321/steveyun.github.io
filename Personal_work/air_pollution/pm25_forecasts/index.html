@@ -27,6 +27,26 @@
         .control button {
             margin-left: 10px;
         }
+
+        #region-summary {
+            margin-top: 20px;
+        }
+        #region-summary h3 {
+            margin-bottom: 10px;
+        }
+        #region-summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #region-summary th, #region-summary td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        #region-summary th {
+            background-color: #f2f2f2;
+        }
+
         .map-container {
             display: flex;
             flex-direction: column;
@@ -49,24 +69,7 @@
             height: 20px;
             display: inline-block;
         }
-        #region-summary {
-            margin-top: 20px;
-        }
-        #region-summary h3 {
-            margin-bottom: 10px;
-        }
-        #region-summary table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #region-summary th, #region-summary td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        #region-summary th {
-            background-color: #f2f2f2;
-        }
+
     </style>
 </head>
 <body>
@@ -97,28 +100,6 @@
                 <label for="pred-timeStep">Select Prediction Time Step (Hourly): </label>
                 <select id="pred-timeStep"></select>
             </div>
-        </div>
-    </div>
-
-    <div style="display: flex; width: 100%; justify-content: space-between;">
-        <div class="map-container" style="margin-left: 150px;">
-            <h2>Observation</h2>
-            <div id="map1" style="height: 700px; width: 100%;"></div>
-        </div>
-        <div class="map-container" style="margin-right: 100px;">
-            <h2>Prediction</h2>
-            <div id="map2" style="height: 700px; width: 100%;"></div>
-        </div>
-    </div>
-
-    <div id="color-bar">
-        <h3>PM2.5 Levels</h3>
-        <div class="color-scale">
-            <div class="color-block" style="background-color: #00FF00;"></div><span>&lt; 12</span><br>
-            <div class="color-block" style="background-color: #FFFF00;"></div><span>12 - 35</span><br>
-            <div class="color-block" style="background-color: #FFA500;"></div><span>36 - 55</span><br>
-            <div class="color-block" style="background-color: #FF0000;"></div><span>56 - 150</span><br>
-            <div class="color-block" style="background-color: #800080;"></div><span>&gt; 150</span><br>
         </div>
     </div>
 
@@ -167,6 +148,30 @@
             </tbody>
         </table>
     </div>
+
+    <div style="display: flex; width: 100%; justify-content: space-between;">
+        <div class="map-container" style="margin-left: 150px;">
+            <h2>Observation</h2>
+            <div id="map1" style="height: 700px; width: 100%;"></div>
+        </div>
+        <div class="map-container" style="margin-right: 100px;">
+            <h2>Prediction</h2>
+            <div id="map2" style="height: 700px; width: 100%;"></div>
+        </div>
+    </div>
+
+    <div id="color-bar">
+        <h3>PM2.5 Levels</h3>
+        <div class="color-scale">
+            <div class="color-block" style="background-color: #00FF00;"></div><span>&lt; 12</span><br>
+            <div class="color-block" style="background-color: #FFFF00;"></div><span>12 - 35</span><br>
+            <div class="color-block" style="background-color: #FFA500;"></div><span>36 - 55</span><br>
+            <div class="color-block" style="background-color: #FF0000;"></div><span>56 - 150</span><br>
+            <div class="color-block" style="background-color: #800080;"></div><span>&gt; 150</span><br>
+        </div>
+    </div>
+
+
 
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
