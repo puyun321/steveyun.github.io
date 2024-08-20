@@ -21,6 +21,7 @@ async function populateDirectoryDropdownForMap2() {
     try {
         const baseUrl = 'https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred?ref=gh-pages';
         const directoryResponse = await fetch(baseUrl);
+        if (!directoryResponse.ok) throw new Error('Failed to fetch prediction directories');
         const directories = await directoryResponse.json();
 
         console.log('Prediction directories:', directories); // Debugging line
@@ -39,8 +40,7 @@ async function populateDirectoryDropdownForMap2() {
 
         // Trigger a load on initial selection
         directorySelect.addEventListener('change', () => {
-            loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
-            synchronizeFileDropdowns(directorySelect.value);
+            populateFileDropdownForMap2(); // Populate files based on selected directory
         });
     } catch (error) {
         console.error('Failed to fetch directories:', error);
@@ -73,7 +73,6 @@ async function populateFileDropdownForMap2() {
         // Trigger a load on initial selection
         fileSelect.addEventListener('change', () => {
             loadAndMergeDataForMap2(fileSelect.value);
-            synchronizeFileDropdowns(fileSelect.value);
         });
     } catch (error) {
         console.error('Failed to fetch files:', error);
@@ -102,10 +101,10 @@ async function loadAndMergeDataForMap2(fileUrl) {
     try {
         console.log('Loading data from CSV for map2');
         const stationInfoUrl = 'https://raw.githubusercontent.com/puyun321/puyun321.github.io/gh-pages/Personal_work/air_pollution/data/station_info.csv';
-        const stationInfoText = await fetchGitHubFileContents(stationInfoUrl);
+        const stationInfoText = await fetch(stationInfoUrl).then(response => response.text());
         const stationData = Papa.parse(stationInfoText, { header: true }).data;
 
-        const csvText = await fetchGitHubFileContents(fileUrl);
+        const csvText = await fetch(fileUrl).then(response => response.text());
         const csvData = Papa.parse(csvText, { header: true }).data;
 
         // Clear existing markers
