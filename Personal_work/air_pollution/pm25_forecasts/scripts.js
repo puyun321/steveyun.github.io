@@ -152,14 +152,27 @@ async function loadAndMergeObservationData(fileUrl) {
     }
 }
 
+// Synchronize time steps between observation and prediction dropdowns
+function synchronizeTimeSteps() {
+    const obsTimeStep = document.getElementById('obs-timeStep');
+    const predTimeStep = document.getElementById('pred-timeStep');
+
+    if (obsTimeStep && predTimeStep) {
+        obsTimeStep.addEventListener('change', () => {
+            predTimeStep.value = obsTimeStep.value; // Set prediction time step to match observation
+            loadAndMergeDataForMap2(document.getElementById('pred-fileSelect').value);
+        });
+
+        predTimeStep.addEventListener('change', () => {
+            obsTimeStep.value = predTimeStep.value; // Set observation time step to match prediction
+            loadAndMergeObservationData(document.getElementById('obs-fileSelect').value);
+        });
+    }
+}
+
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     populateObservationDirectoryDropdown(); // Populate observation directories
-
-    // Trigger data load when time step is changed for observations
-    document.getElementById('obs-timeStep').addEventListener('change', function() {
-        console.log('Selected observation time step:', this.value);
-        loadAndMergeObservationData(document.getElementById('obs-fileSelect').value);
-    });
+    synchronizeTimeSteps(); // Call the function to synchronize dropdowns
 });
