@@ -1,5 +1,4 @@
 // Initialize the second map
-console.log("Initializing map2");
 const map2 = L.map('map2').setView([23.4787, 120.4506], 7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
@@ -7,7 +6,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const markersMap2 = []; // Initialize markers array for map2
 
-// Function to determine color based on PM2.5 value (same as map1)
+// Function to determine color based on PM2.5 value
 function getColor(value) {
     if (value <= 12) return '#00FF00'; // Green for good
     if (value <= 35) return '#FFFF00'; // Yellow for moderate
@@ -51,6 +50,11 @@ async function populateDirectoryDropdownForMap2() {
 async function populateFileDropdownForMap2() {
     try {
         const predDirectoryPath = document.getElementById('pred-directorySelect').value;
+        if (!predDirectoryPath) {
+            console.warn('No directory selected');
+            return;
+        }
+
         const predDirectoryUrl = `https://api.github.com/repos/puyun321/puyun321.github.io/contents/Personal_work/air_pollution/data/pred/${predDirectoryPath}?ref=gh-pages`;
         const predDirectoryResponse = await fetch(predDirectoryUrl);
         if (!predDirectoryResponse.ok) throw new Error('Failed to fetch prediction files');
@@ -70,7 +74,7 @@ async function populateFileDropdownForMap2() {
             }
         });
 
-        // Trigger a load on initial selection
+        // Trigger a load when a CSV file is selected
         fileSelect.addEventListener('change', () => {
             loadAndMergeDataForMap2(fileSelect.value);
         });
@@ -146,21 +150,10 @@ async function loadAndMergeDataForMap2(fileUrl) {
     }
 }
 
-// Synchronize file dropdowns
-function synchronizeFileDropdowns(fileUrl) {
-    const obsFileSelect = document.getElementById('obs-fileSelect');
-    if (obsFileSelect) {
-        // Ensure the file dropdown for observations is updated
-        obsFileSelect.value = fileUrl;
-        loadAndMergeDataFromCSV(obsFileSelect.value);
-    }
-}
-
 // Initial setup
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     populateDirectoryDropdownForMap2();
-    populateFileDropdownForMap2();
     populateTimeStepsForMap2(); // Ensure this function is called
 
     // Trigger a load when a CSV file is selected
