@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
     <style>
+
+	#container {
+    	display: flex;
+    	justify-content: space-between; /* Space between the tables */
+    	align-items: flex-start; /* Align tables to the top */
+    	margin: 0; /* Ensure no margin around container */
+
+	}
+
         #controls {
             display: flex;
             justify-content: space-between;
@@ -28,24 +37,38 @@
             margin-left: 10px;
         }
 
-        #region-summary {
-            margin-top: 20px;
-        }
-        #region-summary h3 {
-            margin-bottom: 10px;
-        }
-        #region-summary table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #region-summary th, #region-summary td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        #region-summary th {
-            background-color: #f2f2f2;
-        }
+	#region-summary {
+    	flex: 1;
+    	margin: 0; /* Remove margin to avoid gaps */
+    	padding: 0; /* Remove padding if necessary */
+	margin-top: 10px;
+	margin-left: 40px;
+	}
+
+	#region-summary_ {
+    	flex: 1;
+    	margin: 0; /* Remove margin to avoid gaps */
+    	padding: 0; /* Remove padding if necessary */
+	margin-top: 10px;
+ 	margin-left: 250px; 
+	}
+
+	#region-summary table, #region-summary_ table {
+    	width: 100%;
+	border-collapse: collapse;
+	margin: 0; /* Remove margin inside tables */
+ 	
+	}
+
+	#region-summary th, #region-summary td, #region-summary_ th, #region-summary_ td {
+    	border: 1px solid #ddd;
+    	padding: 8px;
+    	text-align: center;
+	}
+
+	#region-summary th, #region-summary_ th {
+    	background-color: #f2f2f2;
+	}
 
         .map-container {
             display: flex;
@@ -103,50 +126,98 @@
         </div>
     </div>
 
-    <div id="region-summary">
-        <h3>PM2.5 Summary by Region</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Region</th>
-                    <th>Average PM2.5</th>
-                    <th>Standard Deviation</th>
-                    <th>Highest PM2.5</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>北部</td>
-                    <td id="avg-北部"></td>
-                    <td id="std-北部"></td>
-                    <td id="max-北部"></td>
-                </tr>
-                <tr>
-                    <td>中部</td>
-                    <td id="avg-中部"></td>
-                    <td id="std-中部"></td>
-                    <td id="max-中部"></td>
-                </tr>
-                <tr>
-                    <td>南部</td>
-                    <td id="avg-南部"></td>
-                    <td id="std-南部"></td>
-                    <td id="max-南部"></td>
-                </tr>
-                <tr>
-                    <td>東部</td>
-                    <td id="avg-東部"></td>
-                    <td id="std-東部"></td>
-                    <td id="max-東部"></td>
-                </tr>
-                <tr>
-                    <td>外島</td>
-                    <td id="avg-外島"></td>
-                    <td id="std-外島"></td>
-                    <td id="max-外島"></td>
-                </tr>
-            </tbody>
-        </table>
+    <div id="container">
+        <div id="region-summary">
+            <h3>PM2.5 Summary Observation</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>Average PM2.5</th>
+                        <th>Standard Deviation</th>
+                        <th>Highest PM2.5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>北部</td>
+                        <td id="avg-北部"></td>
+                        <td id="std-北部"></td>
+                        <td id="max-北部"></td>
+                    </tr>
+                    <tr>
+                        <td>中部</td>
+                        <td id="avg-中部"></td>
+                        <td id="std-中部"></td>
+                        <td id="max-中部"></td>
+                    </tr>
+                    <tr>
+                        <td>南部</td>
+                        <td id="avg-南部"></td>
+                        <td id="std-南部"></td>
+                        <td id="max-南部"></td>
+                    </tr>
+                    <tr>
+                        <td>東部</td>
+                        <td id="avg-東部"></td>
+                        <td id="std-東部"></td>
+                        <td id="max-東部"></td>
+                    </tr>
+                    <tr>
+                        <td>外島</td>
+                        <td id="avg-外島"></td>
+                        <td id="std-外島"></td>
+                        <td id="max-外島"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="region-summary_">
+            <h3>PM2.5 Summary Forecast</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>Average PM2.5</th>
+                        <th>Standard Deviation</th>
+                        <th>Highest PM2.5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>北部</td>
+                        <td id="avg-北部_"></td>
+                        <td id="std-北部_"></td>
+                        <td id="max-北部_"></td>
+                    </tr>
+                    <tr>
+                        <td>中部</td>
+                        <td id="avg-中部_"></td>
+                        <td id="std-中部_"></td>
+                        <td id="max-中部_"></td>
+                    </tr>
+                    <tr>
+                        <td>南部</td>
+                        <td id="avg-南部_"></td>
+                        <td id="std-南部_"></td>
+                        <td id="max-南部_"></td>
+                    </tr>
+                    <tr>
+                        <td>東部</td>
+                        <td id="avg-東部_"></td>
+                        <td id="std-東部_"></td>
+                        <td id="max-東部_"></td>
+                    </tr>
+                    <tr>
+                        <td>外島</td>
+                        <td id="avg-外島_"></td>
+                        <td id="std-外島_"></td>
+                        <td id="max-外島_"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div style="display: flex; width: 100%; justify-content: space-between;">
