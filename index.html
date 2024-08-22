@@ -8,7 +8,7 @@
         body {
             font-family: 'Arial', sans-serif;
             background: url('AI_SDGs-new.png') no-repeat center center fixed;
-            background-size: cover;
+            background-size: 100% 100%; /* Ensures the image fits the entire webpage */
             color: #333;
             line-height: 1.6;
             margin: 0;
@@ -40,6 +40,14 @@
             border-bottom: 2px solid #2c3e50;
             padding-bottom: 10px;
             width: 100%; /* Extend underline to full width */
+            display: flex;
+            justify-content: space-between; /* Space between title and content */
+            align-items: center;
+        }
+
+        .small-text {
+            font-size: 0.5em; /* Smaller font size */
+            margin-left: 10px; /* Space between text and icons */
         }
 
         img.profile {
@@ -52,15 +60,17 @@
         }
 
         img.icon {
-            width: 40px; /* Adjusted size for smaller icons */
-            height: 40px;
+            width: 20px; /* Adjusted size for smaller icons */
+            height: 20px;
             vertical-align: middle;
+            margin-left: 10px; /* Space between icons */
         }
 
         img.icon2 {
-            width: 120px; /* Adjusted size for smaller icons */
-            height: 40px;
+            width: 60px; /* Adjusted size for smaller icons */
+            height: 20px;
             vertical-align: middle;
+            margin-left: 10px; /* Space between icons */
         }
 
         .profile-container {
@@ -86,7 +96,7 @@
             border-radius: 5px;
             padding: 20px;
             margin-bottom: 20px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.5); /* White with 80% opacity */
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -127,38 +137,49 @@
         }
 
         .contact img {
-            margin-right: 10px;
             vertical-align: middle;
         }
 
         .contact a {
-            margin-right: 10px;
-        }
-
-        .contact {
-            margin-top: 20px;
-            text-align: center;
+            margin-left: 10px;
         }
 
         .links-container {
             margin-top: 20px;
-            width: 100%;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 70%;
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
     <div class="content">
  
-        <h2>個人資料 Personal Profile</h2>
+        <h2>個人資料 Personal Profile
+            <div class="contact">	    
+                <a href="https://orcid.org/0000-0001-5718-9316">
+                    <img class="icon" alt="ORCID" src="https://user-images.githubusercontent.com/41781189/169704142-2cde875d-c8f8-4045-97ed-9b8f63528862.png">
+                </a> 
+                <a href="https://www.linkedin.com/in/kow-pu-yun-7aaa7b91/">
+                    <img class="icon2" alt="LinkedIn" src="https://user-images.githubusercontent.com/41781189/169704289-190fd250-088c-4a66-bdbe-e02e2b9ee96d.png">
+                </a>
+                <span class="small-text">More personal details please check here</span>
+            </div>
+        </h2>
 
         <div class="profile-container">
             <div class="profile-info">
                 <img class="profile" src="436334710_10234378344186404_3501730956651158388_n.jpg" alt="Profile Image">
                 <div class="links-container">
                     <ul>
+                        <h3>Other Personal Details</h3>
                         <li><a href="Publication">Academic Publications</a></li>
                         <li><a href="Personal_work">Personal Work</a></li>
                         <li><a href="Academic_Award">Academic Award</a></li>
+                        <h3>Support or Contact</h3>
+                        <p>Email: <a href="mailto:steveyun18@gmail.com">steveyun18@gmail.com</a></p>
                     </ul>
                 </div>
             </div>
@@ -181,18 +202,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
-
-        <h3>Support or Contact</h3>
-        <p>Email: <a href="mailto:steveyun18@gmail.com">steveyun18@gmail.com</a></p>
-
-        <div class="contact">
-            <a href="https://orcid.org/0000-0001-5718-9316">
-                <img class="icon" alt="ORCID" src="https://user-images.githubusercontent.com/41781189/169704142-2cde875d-c8f8-4045-97ed-9b8f63528862.png">
-            </a> 
-            <a href="https://www.linkedin.com/in/kow-pu-yun-7aaa7b91/">
-                <img class="icon2" alt="LinkedIn" src="https://user-images.githubusercontent.com/41781189/169704289-190fd250-088c-4a66-bdbe-e02e2b9ee96d.png">
-            </a>
         </div>
     </div>
 </body>
