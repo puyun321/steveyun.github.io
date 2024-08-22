@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KOW PU YUN 邱普運</title>
         <style>
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f9;
@@ -12,6 +13,16 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content {
+            max-width: 1000px; /* Increased width for better alignment */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         h1, h2, h3 {
@@ -21,12 +32,13 @@
 
         h1 {
             font-size: 2.5em;
-            text-align: center;
+            text-align: left;
         }
 
         h2 {
             border-bottom: 2px solid #2c3e50;
             padding-bottom: 10px;
+            width: 100%; /* Extend underline to full width */
         }
 
         img {
@@ -36,6 +48,32 @@
             margin: 0 auto 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-container {
+            display: flex;
+            margin-bottom: 20px;
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        .profile-content {
+            flex: 1;
+        }
+
+        .nav-box {
+            width: 200px; /* Adjust width as needed */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            margin-left: 20px; /* Space between content and nav box */
+        }
+
+        nav a {
+            display: block;
+            margin-bottom: 5px; /* Reduced margin to remove extra space */
         }
 
         ul {
@@ -77,9 +115,10 @@
     </style>
 </head>
 <body>
-    <h1>KOW PU YUN 邱普運</h1>
-    <h2>My Publications</h2>
-
+    <div class="content">
+    <h2>PU YUN's Publications</h2>
+    <div class="profile-container">
+    <div class="profile-content">
     <ul>
         <li>
             <a href="https://www.sciencedirect.com/science/article/pii/S0959652620313329?via%3Dihub" target="_blank">
@@ -121,12 +160,26 @@
                 Advancing climate-resilient flood mitigation: Utilizing transformer-LSTM for water level forecasting at pumping stations
             </a>
         </li>
+    	<p>More publications can be found at: 
+           <a href="https://www.researchgate.net/profile/Kow-Pu-Yun" target="_blank">
+               ResearchGate Profile
+           </a>
+        </p>
+        </div>
+
+        <div class="nav-box">
+                <nav>
+                    <a href="index">Back to Homepage (Personal info)</a>
+                    <a href="Publication">Academic Publications</a>
+                    <a href="Academic_Award">Academic Award</a>
+                </nav>
+        </div>
+
+
     </ul>
 
-    <p>More publications can be found at: 
-        <a href="https://www.researchgate.net/profile/Kow-Pu-Yun" target="_blank">
-            ResearchGate Profile
-        </a>
-    </p>
+   </div>
+   </div>
+
 </body>
 </html>

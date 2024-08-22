@@ -13,6 +13,16 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content {
+            max-width: 1000px; /* Increased width for better alignment */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         h1, h2, h3 {
@@ -37,6 +47,32 @@
             margin: 0 auto 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-container {
+            display: flex;
+            margin-bottom: 20px;
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        .profile-content {
+            flex: 1;
+        }
+
+        .nav-box {
+            width: 200px; /* Adjust width as needed */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            margin-left: 20px; /* Space between content and nav box */
+        }
+
+        nav a {
+            display: block;
+            margin-bottom: 5px; /* Reduced margin to remove extra space */
         }
 
         ul {
@@ -79,8 +115,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>KOW PU YUN 邱普運</h1>
-        <h2>Academic Awards</h2>
+
+        <h2>PU YUN's Academic Awards</h2>
+        <div class="profile-container">
+        <div class="profile-content">
         <ul>
             <li><a href="Academic_Award/107-2獎學金.pdf">2018 Graduate school Outstanding Overseas Chinese Scholarship Semester 2</a></li>
             <li><a href="Academic_Award/108-1獎學金.pdf">2019 Graduate school Outstanding Overseas Chinese Scholarship Semester 1</a></li>
@@ -90,6 +128,15 @@
             <li><a href="https://www.bse.ntu.edu.tw/news/announcement/post/24">2022 Asset Activation Artificial Intelligence Application Innovation Competition - 1st price</a></li>
             <li><a href="Academic_Award/pawees_award2023.pdf">2023 PAWEES 2023 Outstanding Paper Award</a></li>
         </ul>
+        </div>
+        <div class="nav-box">
+                <nav>
+                    <a href="index">Back to Homepage (Personal info)</a>
+                    <a href="Publication">Academic Publications</a>
+                    <a href="Academic_Award">Academic Award</a>
+                </nav>
+        </div>
+        </div>
     </div>
 </body>
 </html>
