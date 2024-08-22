@@ -1,0 +1,150 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('AI_SDGs-new.png') no-repeat center center fixed;
+    background-size: 100% 100%;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.content {
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-align: left;
+}
+
+h2 {
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.small-text {
+    font-size: 0.5em;
+    margin-left: 10px;
+}
+
+.profile-info-container {
+    display: flex;
+    align-items: center;
+}
+
+img.profile {
+    width: 250px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.personal-info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+img.icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+img.icon2 {
+    width: 60px;
+    height: 20px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.profile-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    width: 100%;
+    align-items: flex-start;
+}
+
+.info-text2 {
+    flex: 4;
+    margin-right: 20px;
+    min-width: 300px;
+}
+
+.info-text {
+    flex: 1;
+    margin-right: 20px;
+    min-width: 300px;
+}
+
+.info-box, .info-box2 {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links a {
+    display: block;
+    margin-bottom: 5px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #2980b9;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #3498db;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+.contact img {
+    vertical-align: middle;
+}
+
+.contact a {
+    margin-left: 10px;
+}
