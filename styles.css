@@ -111,6 +111,7 @@ img.icon2 {
 @media (max-width: 1024px) {
     img.profile {
         width: 50%; /* Increase width to 60% for medium screens */
+	height: auto;
     }
    .personal-info-container {
     	width: 45%; /* Adjust width to fit next to image */
@@ -123,6 +124,7 @@ img.icon2 {
 @media (max-width: 768px) {
     img.profile {
         width: 70%; /* Increase width to 70% for smaller screens */
+	height: auto;
         margin-right: 0;
         margin-bottom: 20px; /* Add space below image */
     }
@@ -137,6 +139,7 @@ img.icon2 {
 @media (max-width: 480px) {
     img.profile {
         width: 100%; /* Increase width to 70% for smaller screens */
+	height: auto;
         margin-right: 0;
         margin-bottom: 20px; /* Add space below image */
     }
