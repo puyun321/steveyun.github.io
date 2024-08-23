@@ -6,141 +6,12 @@
     <title>PM2.5 Forecasts Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
-    <style>
-	#main-container {
 
-    	display: flex;
-   	 justify-content: center;
-    	width: 80%;
-	}
-
-	.container-group {
-	background-color: rgba(255, 255, 255, 0.5);
-    	display: flex;
-    	flex-direction: column;
-	    align-items: flex-start; /* Center align the content inside the container */
-	    width: 50%; /* Adjust the width if needed */
-	    margin: 10px 1%; /* Add some margin between the containers */
-
-	}
-
-	.control-group {
-    	margin-left: 10%;
-    	display: flex;
-    	flex-direction: column;
-    	align-items: flex-start;
-    	margin-bottom: 20px;
-	}
-
-	#container {
-    	display: flex;
-   	 justify-content: space-between;
-	}
-
-        #controls-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-
-	.control2 {
-	align-items: flex-start;
-    	margin-bottom: 40px;
-    	display: flex;
-    	flex-direction: column;
-	}
-
-
-	.control {
-	align-items: flex-start;
-	margin-top: 20px;
-    	margin-bottom: 10px;
-    	display: flex;
-    	flex-direction: column;
-	}
-
-        .control label {
-            margin-right: 10px;
-        }
-        .control button {
-m	    argin-top: 10px;
-	    align-self: flex-start;
-        }
-
-        #obs-controls {
-            margin-left: -50%; /* Pushes the element to the right */
-        }
-
-        #pred-controls {
-            margin-left: 50%; /* Pushes the element to the right */
-        }
-
-	#region-summary {
-	justify-content: center;
-	align-items: center;
-    	flex: 1;
-    	margin: 0; 
-    	padding: 0; 
-	margin-top: 10px;
-	margin-left: 10%;
-	}
-
-	#region-summary_ {
-	justify-content: center;
-	align-items: center;
-    	flex: 1;
-    	margin: 0; 
-    	padding: 0; 
-	margin-top: 10px;
- 	margin-left: 10%; 
-	}
-
-	#region-summary table, #region-summary_ table {
-    	width: 90%;
-	border-collapse: collapse;
-	margin: 0; /* Remove margin inside tables */
- 	background-color: rgba(255, 255, 255, 0.5);
-
-	}
-
-	#region-summary th, #region-summary td, #region-summary_ th, #region-summary_ td {
-    	border: 1px solid #ddd;
-    	padding: 8px;
-    	text-align: center;
-	}
-
-	#region-summary th, #region-summary_ th {
-	background-color: rgba(255, 255, 255, 0.5);
-	}
-
-
-
-        }
-        #color-bar {
-            margin-top: 20px;
-        }
-        .color-scale {
-            display: flex;
-            flex-direction: column;
-        }
-        .color-block {
-            width: 10px;
-            height: 10px;
-            display: inline-block;
-        }
-	#map1, #map2 {
-    	margin-top: 20px; /* Space between the map and the table */
-	margin-left: 10%;
-	width: 100%;
-	}
-
-    </style>
 </head>
 <body>
     
     <h1>PM2.5 Forecasts Map</h1>
-<div id="main-container">
+    <div id="main-container">
     <div id="obs-container" class="container-group">
         <!-- Observation controls and summary -->
         <div class="control-group">
@@ -156,11 +27,11 @@ m	    argin-top: 10px;
                 <select id="obs-timeStep"></select>
             </div>
 	    <div class="control2">
-
 	    </div>
         </div>
+
+	<h3 class="centered-heading">PM2.5 Summary Observation</h3>
         <div id="region-summary">
-            <h3>PM2.5 Summary Observation</h3>
 		<table>
     		<tr>
         	   <th>Region</th>
@@ -228,8 +99,8 @@ m	    argin-top: 10px;
                 <select id="pred-timeStep"></select>
             </div>
         </div>
+        <h3 class="centered-heading">PM2.5 Summary Forecast</h3>
         <div id="region-summary_">
-            <h3>PM2.5 Summary Forecast</h3>
             <table>
                 <thead>
                     <tr>
