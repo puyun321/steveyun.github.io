@@ -33,7 +33,7 @@ h1 {
 }
 
 #map1, #map2 {
-    width: 100%; /* Adjusted to full width */
+    width: 80%; /* Adjusted to full width */
     height: 500px;
     margin: 1% 10%; /* Adjusted margin */
     margin-top: 20px; /* Space between the map and the table */
@@ -160,4 +160,36 @@ h1 {
 
 #region-summary th, #region-summary_ th {
     background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Media Queries for smaller screens */
+@media (max-width: 1024px) {
+    #region-summary table, #region-summary_ table {
+    width: 80%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    #map1, #map2 {
+    width: 80%; /* Adjusted to full width */
+    display: flex;
+    height: 500px;
+    margin: 1% 10%; /* Adjusted margin */
+    margin-top: 20px; /* Space between the map and the table */
+    }
+}
+
+@media (max-width: 480px) {
+    #region-summary table, #region-summary_ table {
+    width: 50%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.5);
+    }
+    #map1, #map2 {
+    width: 50%; 
+    display: flex;
+    height: 500px;
+    margin: 1% 10%; /* Adjusted margin */
+    margin-top: 20px; /* Space between the map and the table */
+    }
 }
