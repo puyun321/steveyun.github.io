@@ -147,7 +147,7 @@ h1 {
 }
 
 #region-summary table, #region-summary_ table {
-    width: 90%;
+    width: 80%;
     border-collapse: collapse;
     background-color: rgba(255, 255, 255, 0.5);
 }
