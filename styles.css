@@ -122,7 +122,7 @@ img.icon2 {
 
 @media (max-width: 768px) {
     img.profile {
-        width: 100%; /* Increase width to 70% for smaller screens */
+        width: 70%; /* Increase width to 70% for smaller screens */
         margin-right: 0;
         margin-bottom: 20px; /* Add space below image */
     }
