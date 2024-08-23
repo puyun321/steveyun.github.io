@@ -164,6 +164,22 @@ h1 {
 
 /* Media Queries for smaller screens */
 @media (max-width: 1024px) {
+    #main-container {
+    display: flex;
+
+    justify-content: center;
+    width: 80%;
+    }
+
+    .container-group {
+    background-color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+    margin: 10px 1%;
+    }
+
     #region-summary table, #region-summary_ table {
     width: 80%;
     border-collapse: collapse;
@@ -174,10 +190,28 @@ h1 {
 }
 
 @media (max-width: 480px) {
+    #main-container {
+    display: flex;
+
+    justify-content: center;
+    width: 100%;
+    }
+
+
+    .container-group {
+    background-color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+    margin: 10px 1%;
+    }
+
     #region-summary table, #region-summary_ table {
     width: 100%;
     border-collapse: collapse;
     background-color: rgba(255, 255, 255, 0.5);
     margin: 0 auto; 
     }
+
 }
