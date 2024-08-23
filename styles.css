@@ -57,6 +57,11 @@ img.profile {
     margin-right: 20px;
 }
 
+.fit {
+    height: auto;
+    max-width: 100%
+}
+
 .personal-info-container {
     width: 45%; /* Adjust width to fit next to image */
     display: flex;
