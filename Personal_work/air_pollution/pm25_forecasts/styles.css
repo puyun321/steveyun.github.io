@@ -170,13 +170,6 @@ h1 {
     background-color: rgba(255, 255, 255, 0.5);
     }
 
-    #map1, #map2 {
-    width: 80%; /* Adjusted to full width */
-    display: flex;
-    height: 500px;
-    margin: 1% 10%; /* Adjusted margin */
-    margin-top: 20px; /* Space between the map and the table */
-    }
 }
 
 @media (max-width: 480px) {
@@ -184,12 +177,5 @@ h1 {
     width: 50%;
     border-collapse: collapse;
     background-color: rgba(255, 255, 255, 0.5);
-    }
-    #map1, #map2 {
-    width: 50%; 
-    display: flex;
-    height: 500px;
-    margin: 1% 10%; /* Adjusted margin */
-    margin-top: 20px; /* Space between the map and the table */
     }
 }
