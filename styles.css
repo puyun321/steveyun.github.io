@@ -60,6 +60,7 @@ img.profile {
 .personal-info-container {
     width: 45%; /* Adjust width to fit next to image */
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
 }
 
