@@ -7,57 +7,101 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
     <style>
+	#main-container {
 
-	#container {
     	display: flex;
-    	justify-content: space-between; /* Space between the tables */
-    	align-items: flex-start; /* Align tables to the top */
-    	margin: 0; /* Ensure no margin around container */
+   	 justify-content: center;
+    	width: 80%;
+	}
+
+	.container-group {
+	background-color: rgba(255, 255, 255, 0.5);
+    	display: flex;
+    	flex-direction: column;
+	    align-items: flex-start; /* Center align the content inside the container */
+	    width: 50%; /* Adjust the width if needed */
+	    margin: 10px 1%; /* Add some margin between the containers */
 
 	}
 
-        #controls {
+	.control-group {
+    	margin-left: 10%;
+    	display: flex;
+    	flex-direction: column;
+    	align-items: flex-start;
+    	margin-bottom: 20px;
+	}
+
+	#container {
+    	display: flex;
+   	 justify-content: space-between;
+	}
+
+        #controls-container {
             display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
+            justify-content: center;
+            margin: 20px 0;
         }
-        .control-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .control {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+
+
+	.control2 {
+	align-items: flex-start;
+    	margin-bottom: 40px;
+    	display: flex;
+    	flex-direction: column;
+	}
+
+
+	.control {
+	align-items: flex-start;
+	margin-top: 20px;
+    	margin-bottom: 10px;
+    	display: flex;
+    	flex-direction: column;
+	}
+
         .control label {
             margin-right: 10px;
         }
         .control button {
-            margin-left: 10px;
+m	    argin-top: 10px;
+	    align-self: flex-start;
+        }
+
+        #obs-controls {
+            margin-left: -50%; /* Pushes the element to the right */
+        }
+
+        #pred-controls {
+            margin-left: 50%; /* Pushes the element to the right */
         }
 
 	#region-summary {
+	justify-content: center;
+	align-items: center;
     	flex: 1;
-    	margin: 0; /* Remove margin to avoid gaps */
-    	padding: 0; /* Remove padding if necessary */
+    	margin: 0; 
+    	padding: 0; 
 	margin-top: 10px;
-	margin-left: 40px;
+	margin-left: 10%;
 	}
 
 	#region-summary_ {
+	justify-content: center;
+	align-items: center;
     	flex: 1;
-    	margin: 0; /* Remove margin to avoid gaps */
-    	padding: 0; /* Remove padding if necessary */
+    	margin: 0; 
+    	padding: 0; 
 	margin-top: 10px;
- 	margin-left: 250px; 
+ 	margin-left: 10%; 
 	}
 
 	#region-summary table, #region-summary_ table {
-    	width: 100%;
+    	width: 90%;
 	border-collapse: collapse;
 	margin: 0; /* Remove margin inside tables */
- 	
+ 	background-color: rgba(255, 255, 255, 0.5);
+
 	}
 
 	#region-summary th, #region-summary td, #region-summary_ th, #region-summary_ td {
@@ -67,18 +111,11 @@
 	}
 
 	#region-summary th, #region-summary_ th {
-    	background-color: #f2f2f2;
+	background-color: rgba(255, 255, 255, 0.5);
 	}
 
-        .map-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 48%;
-            margin: 0 1%;
-        }
-        .map-container h2 {
-            margin-bottom: 10px;
+
+
         }
         #color-bar {
             margin-top: 20px;
@@ -88,35 +125,102 @@
             flex-direction: column;
         }
         .color-block {
-            width: 20px;
-            height: 20px;
+            width: 10px;
+            height: 10px;
             display: inline-block;
         }
+	#map1, #map2 {
+    	margin-top: 20px; /* Space between the map and the table */
+	margin-left: 10%;
+	width: 100%;
+	}
 
     </style>
 </head>
 <body>
+    
     <h1>PM2.5 Forecasts Map</h1>
-    <div id="controls">
+<div id="main-container">
+    <div id="obs-container" class="container-group">
+        <!-- Observation controls and summary -->
         <div class="control-group">
             <div class="control">
                 <label for="obs-fileSelect">Select Observation Date: </label>
                 <select id="obs-fileSelect"></select>
+            </div>
+            <div class="control">
                 <button id="download-observation">Download Observation Data</button>
             </div>
             <div class="control">
                 <label for="obs-timeStep">Select Observation Time Step (Hourly): </label>
                 <select id="obs-timeStep"></select>
             </div>
+	    <div class="control2">
+
+	    </div>
         </div>
-        <div class="control-group" style="margin-left: 300px;">
+        <div id="region-summary">
+            <h3>PM2.5 Summary Observation</h3>
+		<table>
+    		<tr>
+        	   <th>Region</th>
+        	   <th>Average PM2.5</th>
+        	   <th>Standard Deviation</th>
+        	   <th>Highest PM2.5</th>
+        	   <th>Max PM2.5 Station</th>
+    		</tr>
+    		<tr>
+        	   <td>北部</td>
+        	   <td id="avg-北部"></td>
+        	   <td id="std-北部"></td>
+        	   <td id="max-北部"></td>
+        	   <td id="max-station-北部"></td>
+    		</tr>
+    		<tr>
+        	   <td>中部</td>
+        	   <td id="avg-中部"></td>
+        	   <td id="std-中部"></td>
+        	   <td id="max-中部"></td>
+        	   <td id="max-station-中部"></td>
+    		</tr>
+                <tr>
+                    <td>南部</td>
+                    <td id="avg-南部"></td>
+                    <td id="std-南部"></td>
+                    <td id="max-南部"></td>
+        	    <td id="max-station-南部"></td>
+                </tr>
+                <tr>
+                    <td>東部</td>
+                    <td id="avg-東部"></td>
+                    <td id="std-東部"></td>
+                    <td id="max-東部"></td>
+        	    <td id="max-station-東部"></td>
+                </tr>
+                <tr>
+                    <td>外島</td>
+                    <td id="avg-外島"></td>
+                    <td id="std-外島"></td>
+                    <td id="max-外島"></td>
+        	    <td id="max-station-外島"></td>
+                </tr>
+</table>
+
+        </div>
+        <div id="map1" style="height: 500px; width: 80%;"></div>
+    </div>
+
+    <div id="pred-container" class="container-group">
+        <!-- Prediction controls and summary -->
+        <div class="control-group">
             <div class="control">
                 <label for="pred-directorySelect">Select Prediction Directory: </label>
                 <select id="pred-directorySelect"></select>
-            </div>
-            <div class="control">
                 <label for="pred-fileSelect">Select Prediction Date: </label>
                 <select id="pred-fileSelect"></select>
+            </div>
+
+ 	    <div class="control">
                 <button id="download-forecast">Download Forecast Data</button>
             </div>
             <div class="control">
@@ -124,55 +228,6 @@
                 <select id="pred-timeStep"></select>
             </div>
         </div>
-    </div>
-
-    <div id="container">
-        <div id="region-summary">
-            <h3>PM2.5 Summary Observation</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Region</th>
-                        <th>Average PM2.5</th>
-                        <th>Standard Deviation</th>
-                        <th>Highest PM2.5</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>北部</td>
-                        <td id="avg-北部"></td>
-                        <td id="std-北部"></td>
-                        <td id="max-北部"></td>
-                    </tr>
-                    <tr>
-                        <td>中部</td>
-                        <td id="avg-中部"></td>
-                        <td id="std-中部"></td>
-                        <td id="max-中部"></td>
-                    </tr>
-                    <tr>
-                        <td>南部</td>
-                        <td id="avg-南部"></td>
-                        <td id="std-南部"></td>
-                        <td id="max-南部"></td>
-                    </tr>
-                    <tr>
-                        <td>東部</td>
-                        <td id="avg-東部"></td>
-                        <td id="std-東部"></td>
-                        <td id="max-東部"></td>
-                    </tr>
-                    <tr>
-                        <td>外島</td>
-                        <td id="avg-外島"></td>
-                        <td id="std-外島"></td>
-                        <td id="max-外島"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
         <div id="region-summary_">
             <h3>PM2.5 Summary Forecast</h3>
             <table>
@@ -182,6 +237,7 @@
                         <th>Average PM2.5</th>
                         <th>Standard Deviation</th>
                         <th>Highest PM2.5</th>
+        	   	<th>Max PM2.5 Station</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -190,57 +246,44 @@
                         <td id="avg-北部_"></td>
                         <td id="std-北部_"></td>
                         <td id="max-北部_"></td>
+        	   	<td id="max-station-北部_"></td>
                     </tr>
                     <tr>
                         <td>中部</td>
                         <td id="avg-中部_"></td>
                         <td id="std-中部_"></td>
                         <td id="max-中部_"></td>
+        	   	<td id="max-station-中部_"></td>
                     </tr>
                     <tr>
                         <td>南部</td>
                         <td id="avg-南部_"></td>
                         <td id="std-南部_"></td>
                         <td id="max-南部_"></td>
+        	   	<td id="max-station-南部_"></td>
                     </tr>
                     <tr>
                         <td>東部</td>
                         <td id="avg-東部_"></td>
                         <td id="std-東部_"></td>
                         <td id="max-東部_"></td>
+        	   	<td id="max-station-東部_"></td>
                     </tr>
                     <tr>
                         <td>外島</td>
                         <td id="avg-外島_"></td>
                         <td id="std-外島_"></td>
                         <td id="max-外島_"></td>
+        	   	<td id="max-station-外島_"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <div id="map2" style="height: 500px; width: 80%;"></div>
     </div>
+</div>
 
-    <div style="display: flex; width: 100%; justify-content: space-between;">
-        <div class="map-container" style="margin-left: 150px;">
-            <h2>Observation</h2>
-            <div id="map1" style="height: 700px; width: 100%;"></div>
-        </div>
-        <div class="map-container" style="margin-right: 100px;">
-            <h2>Prediction</h2>
-            <div id="map2" style="height: 700px; width: 100%;"></div>
-        </div>
-    </div>
 
-    <div id="color-bar">
-        <h3>PM2.5 Levels</h3>
-        <div class="color-scale">
-            <div class="color-block" style="background-color: #00FF00;"></div><span>&lt; 12</span><br>
-            <div class="color-block" style="background-color: #FFFF00;"></div><span>12 - 35</span><br>
-            <div class="color-block" style="background-color: #FFA500;"></div><span>36 - 55</span><br>
-            <div class="color-block" style="background-color: #FF0000;"></div><span>56 - 150</span><br>
-            <div class="color-block" style="background-color: #800080;"></div><span>&gt; 150</span><br>
-        </div>
-    </div>
 
 
 

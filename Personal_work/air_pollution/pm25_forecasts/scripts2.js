@@ -169,89 +169,61 @@ async function loadAndMergeDataForMap2(fileUrl) {
 }
 
 async function displayStatistics2(stationData, pm25Data, timeStep) {
-    // Check if data is provided
     if (!stationData || !pm25Data) {
         console.error('Missing data');
         return;
     }
 
-    // Organize data by area
     const areaStats = {
-        '北部': [],
-        '中部': [],
-        '南部': [],
-        '東部': [],
-        '外島': []
+        '北部': { values: [], maxStation: { name: '', value: -Infinity } },
+        '中部': { values: [], maxStation: { name: '', value: -Infinity } },
+        '南部': { values: [], maxStation: { name: '', value: -Infinity } },
+        '東部': { values: [], maxStation: { name: '', value: -Infinity } },
+        '外島': { values: [], maxStation: { name: '', value: -Infinity } }
     };
 
-    // Check the data structure
-    console.log('Station Data:', stationData);
-    console.log('PM2.5 Data:', pm25Data);
-
-    // Populate areaStats with PM2.5 values
     stationData.forEach(station => {
         const area = station['Area'];
-        if (areaStats[area] !== undefined) {
+        const areaStat = areaStats[area];
+
+        if (areaStat) {
             const stationPM25 = pm25Data
                 .filter(data => data['SITE ID'] === station['SITE ID'])
-                .map(data => {
-                    const value = parseFloat(data[timeStep]);
-                    console.log(`SITE ID: ${data['SITE ID']}, PM2.5 Value: ${value}`);
-                    return isNaN(value) ? null : value; // Filter out NaN values
-                })
-                .filter(value => value !== null); // Remove null values
+                .map(data => parseFloat(data[timeStep]))
+                .filter(value => !isNaN(value));
 
-            console.log(`Area: ${area}, PM2.5 Values:`, stationPM25);
+            areaStat.values.push(...stationPM25);
 
-            areaStats[area].push(...stationPM25);
+            const maxPM25 = Math.max(...stationPM25, areaStat.maxStation.value);
+            if (maxPM25 > areaStat.maxStation.value) {
+                areaStat.maxStation = { name: station['StationName'], value: maxPM25 };
+            }
         }
     });
 
-    // Log the organized data
-    console.log('Area Stats:', areaStats);
-
-    // Calculate and display statistics
     Object.keys(areaStats).forEach(area => {
-        const pm25Values = areaStats[area];
-        if (pm25Values.length > 0) {
-            const average = pm25Values.reduce((sum, value) => sum + value, 0) / pm25Values.length;
-            const stddev = Math.sqrt(pm25Values.map(value => Math.pow(value - average, 2))
-                                            .reduce((sum, value) => sum + value, 0) / pm25Values.length);
-            const highest = Math.max(...pm25Values);
+        const { values, maxStation } = areaStats[area];
+        const avgElement = document.getElementById(`avg-${area}_`);
+        const stdElement = document.getElementById(`std-${area}_`);
+        const maxElement = document.getElementById(`max-${area}_`);
+        const maxStationElement = document.getElementById(`max-station-${area}_`);
 
-            console.log(`Region: ${area}`);
-            console.log(`Average PM2.5: ${average.toFixed(2)}`);
-            console.log(`Standard Deviation: ${stddev.toFixed(2)}`);
-            console.log(`Highest PM2.5: ${highest.toFixed(2)}`);
+        if (values.length > 0) {
+            const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+            const stddev = Math.sqrt(values.reduce((sum, value) => sum + Math.pow(value - average, 2), 0) / values.length);
+            const highest = Math.max(...values);
 
-            // Update the summary section on the webpage
-            const avgElement = document.getElementById(`avg-${area}_`);
-            const stdElement = document.getElementById(`std-${area}_`);
-            const maxElement = document.getElementById(`max-${area}_`);
-
-            if (avgElement && stdElement && maxElement) {
-                avgElement.textContent = average.toFixed(2);
-                stdElement.textContent = stddev.toFixed(2);
-                maxElement.textContent = highest.toFixed(2);
-            } else {
-                console.error(`Element IDs for region ${area} not found`);
-            }
+            [avgElement, stdElement, maxElement, maxStationElement].forEach(el => {
+                if (el) el.textContent = (el === maxStationElement) ? maxStation.name : [average, stddev, highest][[avgElement, stdElement, maxElement].indexOf(el)].toFixed(2);
+            });
         } else {
-            // Handle the case where no data is available for the area
-            const avgElement = document.getElementById(`avg-${area}`);
-            const stdElement = document.getElementById(`std-${area}`);
-            const maxElement = document.getElementById(`max-${area}`);
-
-            if (avgElement && stdElement && maxElement) {
-                avgElement.textContent = 'N/A';
-                stdElement.textContent = 'N/A';
-                maxElement.textContent = 'N/A';
-            } else {
-                console.error(`Element IDs for region ${area} not found`);
-            }
+            [avgElement, stdElement, maxElement, maxStationElement].forEach(el => {
+                if (el) el.textContent = 'N/A';
+            });
         }
     });
 }
+
 
 // Function to download forecast data for all time steps from t+1 to t+72
 async function downloadForecastData() {
