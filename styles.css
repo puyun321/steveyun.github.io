@@ -94,13 +94,13 @@ img.icon2 {
 .info-text2 {
     flex: 4;
     margin-right: 20px;
-    min-width: 300px;
+
 }
 
 .info-text {
     flex: 1;
     margin-right: 20px;
-    min-width: 300px;
+
 }
 
 .info-box, .info-box2 {
@@ -143,7 +143,7 @@ img.icon2 {
 
 @media (max-width: 480px) {
     img.profile {
-        width: 100%; /* Increase width to 70% for smaller screens */
+        width: 80%; /* Increase width to 70% for smaller screens */
 	height: auto;
         margin-right: 0;
         margin-bottom: 20px; /* Add space below image */
