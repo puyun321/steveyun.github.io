@@ -46,6 +46,7 @@ h2 {
 .profile-info-container {
     display: flex;
     align-items: center;
+    flex-wrap: wrap; /* Allows content to wrap */
 }
 
 img.profile {
