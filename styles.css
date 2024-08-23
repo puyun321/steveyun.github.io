@@ -45,7 +45,7 @@ h2 {
 
 .profile-info-container {
     display: flex;
-    align-items: center;
+    align-items: left;
     flex-wrap: wrap; /* Allows content to wrap */
 }
 
