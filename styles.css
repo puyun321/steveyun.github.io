@@ -108,23 +108,43 @@ img.icon2 {
 }
 
 /* Media Queries for smaller screens */
-@media (max-width: 768px) {
-    .content {
-        padding: 10px;
-    }
-
-    .profile-info-container {
-        flex-direction: column; /* Stack profile image and info vertically */
-    }
-
+@media (max-width: 1024px) {
     img.profile {
-        margin-right: 0;
-        margin-bottom: 20px; /* Add some space between image and text */
+        width: 50%; /* Increase width to 60% for medium screens */
     }
+   .personal-info-container {
+    	width: 45%; /* Adjust width to fit next to image */
+    	display: flex;
+    	flex-wrap: wrap;
+    	flex-direction: column;
+    }
+}
 
-    .info-text2, .info-text {
+@media (max-width: 768px) {
+    img.profile {
+        width: 100%; /* Increase width to 70% for smaller screens */
         margin-right: 0;
-        min-width: 100%; /* Ensure they take full width on mobile */
+        margin-bottom: 20px; /* Add space below image */
+    }
+   .personal-info-container {
+    	width: 100%; /* Adjust width to fit next to image */
+    	display: flex;
+    	flex-wrap: wrap;
+    	flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    img.profile {
+        width: 100%; /* Increase width to 70% for smaller screens */
+        margin-right: 0;
+        margin-bottom: 20px; /* Add space below image */
+    }
+   .personal-info-container {
+    	width: 100%; /* Adjust width to fit next to image */
+    	display: flex;
+    	flex-wrap: wrap;
+    	flex-direction: column;
     }
 }
 
