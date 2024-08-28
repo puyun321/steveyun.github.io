@@ -18,6 +18,25 @@ const visitorCounts = {
     "Indonesia": 0
 };
 
+// Add country codes based on country names
+const countryCodes = {
+  "Malaysia": "MY",
+  "China": "CN",
+  "Taiwan": "TW",
+  "Korea": "KR",
+  "Japan": "JP",
+  "India": "IN",
+  "United States": "US",
+  "Canada": "CA",
+  "France": "FR",
+  "Germany": "DE",
+  "Italy": "IT",
+  "Spain": "ES",
+  "Thailand": "TH",
+  "Vietnam": "VN",
+  "Indonesia": "ID"
+};
+
 // Function to update the visitor count for a country
 function updateVisitorCount(country) {
     if (visitorCounts[country] !== undefined) {
@@ -52,7 +71,7 @@ function displayVisitorCounts() {
         // Create the flag image
         const flag = document.createElement('img');
         flag.className = 'flag';
-        flag.src = `flags/${country}.png`; // Ensure you have the flag images in the 'flags' folder
+	flag.src = `https://flagsapi.com/:countryCodes[country]/:style/:size.png`
 
         // Create a label for the country
         const countryLabel = document.createElement('span');
