@@ -90,8 +90,8 @@ function displayVisitorCounts() {
 
         // Append the flag, country label, bar, and count label to the country container
         countryContainer.appendChild(flag);
-        countryContainer.appendChild(countryLabel);
-        countryContainer.appendChild(bar);
+        //countryContainer.appendChild(countryLabel);
+        //countryContainer.appendChild(bar);
         countryContainer.appendChild(countLabel);
 
         // Append the country container to the main div
