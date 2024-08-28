@@ -208,9 +208,45 @@ p {
 #search-input {
     width: 100%;
     padding: 10px;
-    margin-top: 10px;
+    margin-top: 0px;
     font-size: 16px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+/* visitor count bar*/
+#visitor-counts {
+    border: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap; /* This allows the items to wrap to the next line */
+    justify-content: flex-start;
+    gap: 10px; /* Adds some space between items */
+    margin: 20px 0;
+}
+
+.country-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px; /* Adjust the minimum width as needed */
+    flex-grow: 1; /* Allows the containers to grow and wrap */
+}
+
+.flag {
+    width: 24px;
+    height: 16px;
+    margin-bottom: 8px; /* Space between the flag and the country name */
+}
+
+.bar {
+    height: 20px;
+    background-color: #4CAF50;
+    margin: 0px 0;
+    width: 100%; /* Set the bar width to 100% of the container */
+}
+
+.count-label {
+    font-weight: bold;
+    text-align: center;
 }
