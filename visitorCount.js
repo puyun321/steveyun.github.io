@@ -71,7 +71,7 @@ function displayVisitorCounts() {
         // Create the flag image
         const flag = document.createElement('img');
         flag.className = 'flag';
-	flag.src = `https://flagsapi.com/:countryCodes[country]/:style/:size.png`
+	flag.src = `https://flagsapi.com/:countryCodes[country]/:style/64.png`
 
         // Create a label for the country
         const countryLabel = document.createElement('span');
