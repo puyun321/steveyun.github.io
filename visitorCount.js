@@ -71,7 +71,7 @@ function displayVisitorCounts() {
         // Create the flag image
         const flag = document.createElement('img');
         flag.className = 'flag';
-	flag.src = `https://flagsapi.com/{countryCodes[country]}/shiny/64.png`
+	flag.src = `https://flagsapi.com/${countryCodes[country]}/shiny/64.png`
 
         // Create a label for the country
         const countryLabel = document.createElement('span');
