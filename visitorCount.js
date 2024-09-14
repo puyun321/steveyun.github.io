@@ -1,5 +1,6 @@
 let showAll = false;
 
+/**
 const visitorCounts = {
     "Malaysia": 0,
     "China": 0,
@@ -17,6 +18,7 @@ const visitorCounts = {
     "Vietnam": 0,
     "Indonesia": 0
 };
+**/、
 
 // Add country codes based on country names
 const countryCodes = {
