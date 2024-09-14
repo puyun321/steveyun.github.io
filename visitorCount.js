@@ -53,7 +53,7 @@ function updateVisitorCount(country) {
 // Function to display visitor counts on the webpage
 function displayVisitorCounts() {
     const visitorCountsDiv = document.getElementById('visitor-counts');
-    visitorCountsDiv.innerHTML = ''; // Clear previous data
+    //visitorCountsDiv.innerHTML = ''; // Clear previous data
     visitorCountsDiv.style.display = 'flex'; // Display items in a row
     visitorCountsDiv.style.flexWrap = 'wrap'; // Allow wrapping to new rows
 
