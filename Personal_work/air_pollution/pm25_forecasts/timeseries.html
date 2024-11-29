@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM2.5 Forecasts Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <h1>PM2.5 Forecasts Map</h1>
+
+    <!-- Button to navigate to another page -->
+    <button id="toggle-button" onclick="navigateToNewPage()">Regional Figure</button>
+    <script>
+        function navigateToNewPage() {
+            // Redirect the user to the new HTML page
+            window.location.href = "index.html"; // Replace with the actual path to your new HTML page
+        }
+    </script>
+
+    <!-- Controls for selecting files and stations -->
+    <div id="controls">
+        <label for="fileSelect">Select Date/Time:</label>
+        <select id="fileSelect"></select>
+
+        <label for="station-select">Select Station:</label>
+        <select id="station-select"></select>
+    </div>
+
+    <!-- Combined chart display -->
+    <div style="width: 70%; height: 300px; margin: auto;">
+        <canvas id="combined-chart"></canvas>
+    </div>
+
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- External JavaScript file -->
+    <script src="scripts3.js"></script>
+</body>
+</html>

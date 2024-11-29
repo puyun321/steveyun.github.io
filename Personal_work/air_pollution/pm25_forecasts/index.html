@@ -11,6 +11,16 @@
 <body>
     
     <h1>PM2.5 Forecasts Map</h1>
+
+    <button id="toggle-button" onclick="navigateToNewPage()">Time Series Figure</button>
+
+    <script>
+        function navigateToNewPage() {
+            // Redirect the user to the new HTML page
+            window.location.href = "timeseries.html"; // Replace with the actual path to your new HTML page
+        }
+    </script>
+
     <div id="main-container">
     <div id="obs-container" class="container-group">
         <!-- Observation controls and summary -->
