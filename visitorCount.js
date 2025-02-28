@@ -5,7 +5,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCMUf4-ODAegkRC1RMfzbuYGTtA6r_9gSY",
   authDomain: "py-page.firebaseapp.com",
   projectId: "py-page",
-  storageBucket: "py-page.firebasestorage.app",
+  storageBucket: "py-page.appspot.com",
   messagingSenderId: "1028528276815",
   appId: "1:1028528276815:web:ea15a014fa245f1e2e713a",
   measurementId: "G-8TBQEL76YE"
@@ -50,11 +50,49 @@ async function updateVisitorCount() {
     }
 }
 
-// 顯示各國瀏覽數量
-function displayVisitorCounts(country, count) {
-    const visitorCountsElement = document.getElementById('visitor-counts');
-    visitorCountsElement.innerHTML = `<h4>${country}: ${count} 次</h4>`;
+
+// 將國家名稱轉換為 ISO 代碼
+function getCountryCode(countryName) {
+    const countryCodes = {
+        "United States": "us",
+        "Canada": "ca",
+        "United Kingdom": "gb",
+        "Malaysia": "my",
+		"Taiwan": "tw",
+		"China": "cn"
+	
+        // 添加更多國家名稱和對應的 ISO 代碼
+    };
+    return countryCodes[countryName] || "Unknown";
 }
 
+// 顯示所有國家的瀏覽數量
+async function displayAllVisitorCounts() {
+    const visitorCountsElement = document.getElementById('visitor-counts');
+    visitorCountsElement.innerHTML = ''; // 清空現有內容
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "visitors"));
+        querySnapshot.forEach((doc) => {
+            const country = doc.id;
+            const count = doc.data().count;
+            const countryCode = getCountryCode(country);
+
+            if (countryCode !== "Unknown") {
+                const div = document.createElement('div');
+                div.classList.add('visitor-count-item');
+                div.innerHTML = `<span class="fi fi-${countryCode.toLowerCase()}"></span> <h4>${country}: ${count} 次</h4>`;
+                visitorCountsElement.appendChild(div);
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching visitor counts:", error);
+    }
+}
+
+
 // 初始化
-document.addEventListener('DOMContentLoaded', updateVisitorCount);
+document.addEventListener('DOMContentLoaded', async () => {
+    await updateVisitorCount();
+    await displayAllVisitorCounts();
+});
