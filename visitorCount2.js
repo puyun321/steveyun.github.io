@@ -69,12 +69,12 @@ function displayVisitorCounts(country, count) {
 // 將國家名稱轉換為 ISO 代碼
 function getCountryCode(countryName) {
     const countryCodes = {
-        "United States": "US",
-        "Canada": "CA",
-        "United Kingdom": "GB",
-        "Malaysia": "MY",
-		"Taiwan": "TW",
-		"China": "CN"
+        "United States": "us",
+        "Canada": "ca",
+        "United Kingdom": "gb",
+        "Malaysia": "my",
+		"Taiwan": "tw",
+		"China": "cn"
 	
         // 添加更多國家名稱和對應的 ISO 代碼
     };

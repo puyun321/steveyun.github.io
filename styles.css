@@ -225,6 +225,17 @@ p {
     margin: 20px 0;
 }
 
+#國旗
+.visitor-count-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.flagpack {
+    margin-right: 10px;
+}
+
 .country-container {
     display: flex;
     flex-direction: column;
