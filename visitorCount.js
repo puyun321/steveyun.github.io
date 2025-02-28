@@ -1,123 +1,70 @@
-let showAll = false;
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-/**
-const visitorCounts = {
-    "Malaysia": 0,
-    "China": 0,
-    "Taiwan": 1,
-    "Korea": 0,
-    "Japan": 0,
-    "India": 0,
-    "United States": 0,
-    "Canada": 0,
-    "France": 0,
-    "Germany": 0,
-    "Italy": 0,
-    "Spain": 0,
-    "Thailand": 0,
-    "Vietnam": 0,
-    "Indonesia": 0
-};
-**/、
-
-// Add country codes based on country names
-const countryCodes = {
-  "Malaysia": "MY",
-  "China": "CN",
-  "Taiwan": "TW",
-  "Korea": "KR",
-  "Japan": "JP",
-  "India": "IN",
-  "United States": "US",
-  "Canada": "CA",
-  "France": "FR",
-  "Germany": "DE",
-  "Italy": "IT",
-  "Spain": "ES",
-  "Thailand": "TH",
-  "Vietnam": "VN",
-  "Indonesia": "ID"
+const firebaseConfig = {
+  apiKey: "AIzaSyCMUf4-ODAegkRC1RMfzbuYGTtA6r_9gSY",
+  authDomain: "py-page.firebaseapp.com",
+  projectId: "py-page",
+  storageBucket: "py-page.appspot.com",
+  messagingSenderId: "1028528276815",
+  appId: "1:1028528276815:web:ea15a014fa245f1e2e713a",
+  measurementId: "G-8TBQEL76YE"
 };
 
-// Function to update the visitor count for a country
-function updateVisitorCount(country) {
-    if (visitorCounts[country] !== undefined) {
-        visitorCounts[country]++;
-    } else {
-        visitorCounts[country] = 1;
+// 初始化 Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 獲取訪客的國家資訊
+async function getVisitorCountry() {
+    try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        return data.country_name || "Unknown"; // 如果未獲取成功，回傳 "Unknown"
+    } catch (error) {
+        console.error('Error fetching country:', error);
+        return "Unknown";
     }
-
-    displayVisitorCounts();
 }
 
-// Function to display visitor counts on the webpage
-function displayVisitorCounts() {
-    const visitorCountsDiv = document.getElementById('visitor-counts');
-    //visitorCountsDiv.innerHTML = ''; // Clear previous data
-    visitorCountsDiv.style.display = 'flex'; // Display items in a row
-    visitorCountsDiv.style.flexWrap = 'wrap'; // Allow wrapping to new rows
+// 更新各國瀏覽數量
+async function updateVisitorCount() {
+    const country = await getVisitorCountry();
+    const visitorRef = doc(db, "visitors", country);
 
-    // Convert the visitorCounts object into an array and sort by count
-    const sortedCountries = Object.keys(visitorCounts)
-        .map(country => ({ country, count: visitorCounts[country] }))
-        .sort((a, b) => b.count - a.count);
+    try {
+        const visitorSnap = await getDoc(visitorRef);
+        if (visitorSnap.exists()) {
+            await updateDoc(visitorRef, { count: increment(1) });
+        } else {
+            await setDoc(visitorRef, { count: 1 });
+        }
 
-    // Show only the top 5 if showAll is false
-    const countriesToShow = showAll ? sortedCountries : sortedCountries.slice(0, 5);
+        // 讀取所有國家的計數
+        const snapshot = await getFirestore(db).collection("visitors").get();
+        const data = {};
+        snapshot.forEach(doc => {
+            data[doc.id] = doc.data().count;
+        });
 
-    countriesToShow.forEach(({ country, count }) => {
-        // Create a container for each country's info
-        const countryContainer = document.createElement('div');
-        countryContainer.className = 'country-container';
-
-        // Create the flag image
-        const flag = document.createElement('img');
-        flag.className = 'flag';
-	flag.src = `https://flagsapi.com/${countryCodes[country]}/shiny/64.png`
-
-        // Create a label for the country
-        const countryLabel = document.createElement('span');
-        countryLabel.className = 'country-label';
-        countryLabel.textContent = country;
-
-        // Create the bar
-        const bar = document.createElement('div');
-        bar.className = 'bar';
-        bar.style.width = `${count * 10}px`; // Adjust the multiplier for desired bar width
-
-        // Create a label for the count
-        const countLabel = document.createElement('span');
-        countLabel.className = 'count-label';
-        countLabel.textContent = count;
-
-        // Append the flag, country label, bar, and count label to the country container
-        countryContainer.appendChild(flag);
-        //countryContainer.appendChild(countryLabel);
-        //countryContainer.appendChild(bar);
-        countryContainer.appendChild(countLabel);
-
-        // Append the country container to the main div
-        visitorCountsDiv.appendChild(countryContainer);
-    });
+        // 顯示統計數據
+        displayVisitorCounts(data);
+    } catch (error) {
+        console.error("Error updating visitor count:", error);
+    }
 }
 
-// Function to toggle between showing top 5 and all countries
-function toggleCountries() {
-    showAll = !showAll;
-    const toggleButton = document.getElementById('toggle-button');
-    toggleButton.textContent = showAll ? "Show Top 5" : "Show All";
-    displayVisitorCounts();
+// 顯示各國瀏覽數量
+function displayVisitorCounts(data) {
+    const visitorCountsElement = document.getElementById('visitor-counts');
+    let html = '<h4>各國瀏覽數量:</h4>';
+    html += '<ul>';
+    for (const [country, count] of Object.entries(data)) {
+        html += `<li>${country}: ${count} 次</li>`;
+    }
+    html += '</ul>';
+    visitorCountsElement.innerHTML = html;
 }
 
-// Fetch the visitor's IP and determine the country
-function fetchVisitorCountry() {
-    fetch('https://ipapi.co/json/')
-        .then(response => response.json())
-        .then(data => {
-            const country = data.country_name;
-            updateVisitorCount(country);
-        })
-        .catch(error => console.error('Error fetching visitor country:', error));
-}
-
-
+// 初始化
+document.addEventListener('DOMContentLoaded', updateVisitorCount);
