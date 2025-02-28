@@ -57,10 +57,10 @@ function displayVisitorCounts(country, count) {
     // 獲取國家的 ISO 代碼（例如，US 代表美國）
     const countryCode = getCountryCode(country);
     
-    // 使用 Flagpack 顯示國旗
+    // 使用 Flag Icon CSS 顯示國旗
     visitorCountsElement.innerHTML = `
         <div class="visitor-count-item">
-            <span class="flagpack flagpack-${countryCode.toLowerCase()}"></span>
+            <span class="fi fi-${countryCode.toLowerCase()}"></span>
             <h4>${country}: ${count} 次</h4>
         </div>
     `;
