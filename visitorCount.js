@@ -1,8 +1,5 @@
-
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyCMUf4-ODAegkRC1RMfzbuYGTtA6r_9gSY",
@@ -29,43 +26,64 @@ async function getVisitorCountry() {
     }
 }
 
+// 獲取訪客的 IP 地址
+async function getVisitorIP() {
+    try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        return data.ip || "Unknown"; // 如果獲取失敗，回傳 "Unknown"
+    } catch (error) {
+        console.error('Error fetching IP:', error);
+        return "Unknown";
+    }
+}
+
 // 更新各國瀏覽數量
 async function updateVisitorCount() {
     const country = await getVisitorCountry();
+    const ip = await getVisitorIP();
     const visitorRef = doc(db, "visitors", country);
+    const ipRef = doc(db, "ips", ip);
 
     try {
-        const visitorSnap = await getDoc(visitorRef);
-        if (visitorSnap.exists()) {
-            await updateDoc(visitorRef, { count: increment(1) });
-        } else {
-            await setDoc(visitorRef, { count: 1 });
+        const ipSnap = await getDoc(ipRef);
+        const now = new Date();
+        const lastVisitTime = ipSnap.exists() ? ipSnap.data().lastVisitTime.toDate() : null;
+
+        // 檢查是否在過去 30 分鐘內訪問過
+        if (!lastVisitTime || (now - lastVisitTime) > 30 * 60 * 1000) {
+            const visitorSnap = await getDoc(visitorRef);
+            if (visitorSnap.exists()) {
+                await updateDoc(visitorRef, { count: increment(1) });
+            } else {
+                await setDoc(visitorRef, { count: 1 });
+            }
+
+            // 更新 IP 的最後訪問時間
+            await setDoc(ipRef, { lastVisitTime: now });
+
+            // 讀取所有國家的計數
+            const snapshot = await getDoc(visitorRef);
+            const data = snapshot.data();
+
+            // 顯示統計數據
+            displayVisitorCounts(country, data.count);
         }
-
-        // 讀取所有國家的計數
-        const snapshot = await getDoc(visitorRef);
-        const data = snapshot.data();
-
-        // 顯示統計數據
-        displayVisitorCounts(country, data.count);
     } catch (error) {
         console.error("Error updating visitor count:", error);
     }
 }
 
-
 // 將國家名稱轉換為 ISO 代碼
 function getCountryCode(countryName) {
     const countryCodes = {
         "Canada": "ca",
-		"China": "cn",
-		"Japan": "jp",
+        "China": "cn",
+        "Japan": "jp",
         "Malaysia": "my",
-		"Taiwan": "tw",
-		"United Kingdom": "gb",
-		"United States": "us"
-
-	
+        "Taiwan": "tw",
+        "United Kingdom": "gb",
+        "United States": "us"
         // 添加更多國家名稱和對應的 ISO 代碼
     };
     return countryCodes[countryName] || "Unknown";
@@ -94,7 +112,6 @@ async function displayAllVisitorCounts() {
         console.error("Error fetching visitor counts:", error);
     }
 }
-
 
 // 初始化
 document.addEventListener('DOMContentLoaded', async () => {
