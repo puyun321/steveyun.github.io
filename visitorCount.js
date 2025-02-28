@@ -1,3 +1,5 @@
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
@@ -55,12 +57,14 @@ async function updateVisitorCount() {
 // 將國家名稱轉換為 ISO 代碼
 function getCountryCode(countryName) {
     const countryCodes = {
-        "United States": "us",
         "Canada": "ca",
-        "United Kingdom": "gb",
+		"China": "cn",
+		"Japan": "jp",
         "Malaysia": "my",
 		"Taiwan": "tw",
-		"China": "cn"
+		"United Kingdom": "gb",
+		"United States": "us"
+
 	
         // 添加更多國家名稱和對應的 ISO 代碼
     };
